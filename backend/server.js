@@ -3,11 +3,19 @@ const dotenv = require('dotenv')
 const app = express()
 const connectDB = require('./config/db')
 
+//ERROR HANDLER MIDDLEWARE
+const {notFound, errorHandler} = require('./middleware/errorMiddleware')
+
+//LOGIN/REGISTER TOKEN GENERATION
+const generateToken = require('./utils/generateToken')
+
 dotenv.config()
 connectDB()
 
+//ALLOW JSON INCOMING
+app.use(express.json())
 
-//ENSTANTIATE OBJECTS
+//INSTANTIATE OBJECTS
 const ExampleCut = require('./models/CutModel')
 const Appointment = require('./models/AppointmentModel')
 const DailyMessage = require('./models/MessageModel')
@@ -61,3 +69,67 @@ app.get('/api/services', async (req, res)=>{
     const services = await Service.find({})
     res.json(services)
 })
+
+//USER AUTHENTICATION AND LOGIN/REGISTRATION
+//Login
+app.post('/api/users/login', async(req, res)=>{
+    
+    const{email, password} = req.body
+
+    const user = await User.findOne({email})
+
+    if (user && (await user.matchPassword(password))){
+        res.json({
+            _id: user.id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
+
+        })
+    }
+    else{
+        res.json({message: "Invalid Login"})
+        throw new Error('Invalid Credentials')
+    }
+})
+
+//Register
+app.post('/api/users/', async(req, res) =>{
+
+    const {name, email, password} = req.body
+
+    const userExists = await User.findOne({email})
+
+    if(userExists){
+        res.status(401).json({message: "Email Already Registered"})
+        throw new Error('Email Already Registered')
+    }
+    
+    const user = await User.create({
+        name,
+        email,
+        password
+    })
+
+    if(user){
+        res.status(201).json({
+            _id: user.id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
+        })
+    }
+    else{
+        res.status(400)
+        throw new Error("Invalid Credentials")
+    }
+
+})
+
+
+
+//ERROR HANDLING
+app.use(notFound);
+app.use(errorHandler)

@@ -30,6 +30,7 @@ const GalleryScreen = () => {
                  </Col>
                 ))}
             </Row>
+            
         </div>
     )
 }

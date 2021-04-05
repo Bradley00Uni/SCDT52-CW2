@@ -19,7 +19,7 @@ const Header = () => {
                 <Link to='/'></Link><Nav.Link className="nav-text" href="/" class="navItem">Book an Appointment</Nav.Link>
                 <Link to='gallery'></Link><Nav.Link className="nav-text" href="/gallery" class="navItem">Gallery</Nav.Link>
                 <Link to='/'></Link><Nav.Link className="nav-text" href="/" class="navItem">Contact Us</Nav.Link>
-                <Link to='/'></Link><Nav.Link className="nav-text" href="/" class="navItem">Account</Nav.Link>
+                <Link to='/login'></Link><Nav.Link className="nav-text" href="/login" class="navItem">Account</Nav.Link>
             </Nav>
             </Navbar.Collapse>
         </Navbar>
