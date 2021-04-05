@@ -2,10 +2,22 @@
   color: white !important;
 }
 
-#blank{
+.header-text{
    font-family: 'Chelsea Market', cursive !important;
+   margin-top: 4%;
+   margin-bottom: 4%;
 }
 
 .align-nav{
   margin-left: 35%;
+}
+
+.row-management{
+  width: 1920px;
+  height: 200px;
+}
+
+.temporary-padding{
+  margin-top: 6%;
+  margin-bottom: 6%;
 }
