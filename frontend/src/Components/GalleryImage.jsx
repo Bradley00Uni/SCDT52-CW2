@@ -3,14 +3,18 @@ import { Container, Card } from 'react-bootstrap'
 
 const GalleryImage = ({exampleCut}) => {
 
+    var dateString = exampleCut.uploadDate.toString()
+    var dateFormat = dateString.substring(0,10)
+    
+
     return (
         <Container className="py-3">
             <Card className="text-center">
               <Card.Img variant="top" src={exampleCut.imageURL} />
               <Card.Body>
                   <Card.Text>
-                      <p>{exampleCut.description}</p>
-                      <p>Uploaded: {exampleCut.uploadDate}</p>
+                      <h5 className='gallery-caption'><strong>{exampleCut.description}</strong></h5>
+                      <p className='gallery-date'>Uploaded: {dateFormat}</p>
                   </Card.Text>
               </Card.Body>
             </Card>

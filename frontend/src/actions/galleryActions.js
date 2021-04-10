@@ -1,23 +1,15 @@
 import axios from 'axios'
 
-export const listImages = () => async (dispatch) =>{
-
+export const listGallery = () => async (dispatch) =>{
     try{
-        //dispatch executes reducers to update state
-        //first one activates product list request
-        dispatch({type: 'IMAGE_LIST_REQUEST'})
-
-        //gets data from api
+        //EXECUTES REDUCERS TO UPDATE STATE
+        dispatch({type: 'GALLERY_LIST_REQUEST'})
         const {data} = await axios.get('/api/cuts')
 
-        //populates the response into a PAYLOAD
-        dispatch({type: 'IMAGE_LIST_SUCCESS', payload: data})
-
+        dispatch({type: 'GALLERY_LIST_SUCCESS', payload: data})
     }
     catch(error){
-        //sends error message
-        dispatch({type: 'IMAGE_LIST_FAIL',
-            payload: error.message
-        })
+        //SENDS ERROR MESSAGE
+        dispatch({type: 'GALLERY_LIST_FAIL', payload: error.message})
     }
 }

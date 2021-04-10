@@ -1,36 +1,38 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {Row, Col} from 'react-bootstrap'
 import axios from 'axios'
+
 import Image from '../Components/GalleryImage'
+import Loader from '../Components/Loader'
+import ErrorMessage from '../Components/ErrorMessage'
+
+import {useDispatch, useSelector} from 'react-redux'
+import {listGallery} from '../actions/galleryActions'
 
 const GalleryScreen = () => {
 
-    //added to handle states
-    const [exampleCuts, setImages] = useState([])
+    const dispatch = useDispatch()
+    const galleryList = useSelector(state => state.galleryList) 
+    const {loading,error, exampleCuts} = galleryList
 
-    //call useEffect - runs on page load
+
+    //RUNS ON PAGE LOAD
     useEffect(()=>{
-        console.log("--Fetched Gallery Images--")
-        const FetchImages = async () =>{
-            const {data} = await axios.get('/api/cuts')
-            setImages(data)
-        } 
-        
-        FetchImages()
-
-    }, [])
+        dispatch(listGallery())
+    }, [dispatch])
 
     return (
         <div>
             <h1 class="header-text">Photo Gallery</h1>
-            <Row>
-                {exampleCuts.map(exampleCut => (
-                 <Col sm={12} md={6} lg={4}>
-                     <Image exampleCut={exampleCut} />
-                 </Col>
-                ))}
-            </Row>
-            
+            {loading ? (<Loader />) : error ? (<ErrorMessage variant="danger">{error}</ErrorMessage>) : (
+                <Row>
+                    {exampleCuts.map(exampleCut => (
+                    <Col sm={12} md={6} lg={4}>
+                        <Image exampleCut={exampleCut} />
+                    </Col>
+                    ))}
+                </Row>
+            )}
         </div>
     )
 }

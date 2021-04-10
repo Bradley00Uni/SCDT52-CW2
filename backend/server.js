@@ -6,6 +6,9 @@ const connectDB = require('./config/db')
 //ERROR HANDLER MIDDLEWARE
 const {notFound, errorHandler} = require('./middleware/errorMiddleware')
 
+//AUTHORISE MIDDLEWARE
+const protect = require('./middleware/authMiddleware')
+
 //LOGIN/REGISTER TOKEN GENERATION
 const generateToken = require('./utils/generateToken')
 
@@ -123,11 +126,30 @@ app.post('/api/users/', async(req, res) =>{
     }
     else{
         res.status(400)
-        throw new Error("Invalid Credentials")
+        throw new Error("Invalid Credentials Provided")
     }
 
 })
 
+app.get('api/users/profile', protect, async(req, res) =>{
+
+    const user = await User.findById(req.user.id)
+
+    if(user){
+        res.status(201).json({
+            _id: user.id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
+        })
+    }
+    else{
+        res.status(400)
+        throw new Error("Invalid Credentials Provided")
+    }
+
+})
 
 
 //ERROR HANDLING

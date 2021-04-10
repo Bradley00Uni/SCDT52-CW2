@@ -3,21 +3,87 @@
 }
 
 .header-text{
-   font-family: 'Chelsea Market', cursive !important;
    margin-top: 4%;
    margin-bottom: 4%;
+   font-family: 'Chelsea Market', cursive !important;
 }
 
 .align-nav{
   margin-left: 35%;
 }
 
-.row-management{
-  width: 1920px;
-  height: 200px;
-}
-
 .temporary-padding{
   margin-top: 6%;
   margin-bottom: 6%;
+}
+
+.section-divide {
+  border-color: #ffffff;
+  height: 2px;
+  margin-top: 5%;
+  margin-bottom: 4%;
+  border-style: dashed;
+}
+
+.gallery-caption, .service-service{
+  font-family: 'Chelsea Market', cursive !important;
+}
+
+.body-text, .gallery-date, .serivce-date{
+  font-family: 'New Tegomin', serif;
+}
+
+.alert-red{
+  background-color: orange;
+}
+
+.kaye-picture, .google-map{
+  margin-bottom: 5%;
+  border: white 3px dashed
+}
+
+.button-row{
+  margin-top: 3%;
+}
+
+.opening-times{
+  border: 3px solid #444 !important;
+}
+
+.closed{
+  background-color: #e74c3c;
+}
+
+.closed-card{
+  opacity: 0.7 !important;
+}
+
+#openingTimes-row{
+  margin-bottom: 8%;
+}
+
+#openingTimes{
+  margin-bottom: 4%;
+}
+
+.zoom {
+  transition: transform .2s;
+}
+
+.zoom:hover {
+  transform: scale(1.2); 
+}
+
+.bottom-row, #contact-row{
+  margin-bottom: 4%;
+}
+
+.social-logo{
+  margin-top: 15%;
+  margin-bottom: 7%;
+}
+
+.social-text{
+  font-family: 'Chelsea Market', cursive !important;
+  color: #3498db;
 }
