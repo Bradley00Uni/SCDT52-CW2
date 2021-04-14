@@ -6,6 +6,7 @@ import FormContainer from '../Components/FormContainer'
 
 import {login} from '../actions/userActions'
 import Loader from '../Components/Loader'
+import ErrorMessage from '../Components/ErrorMessage'
 
 
 const LoginScreen = ({ location, history }) => {
@@ -23,7 +24,7 @@ const LoginScreen = ({ location, history }) => {
     useEffect(() => {
 
         if(!userInfo){
-            history.push('/login')
+            history.push('/')
         }
 
     }, [history, userInfo])
@@ -57,9 +58,10 @@ const LoginScreen = ({ location, history }) => {
                         onChange={(e) => setPassword(e.target.value)}
                     ></FormControl>
                 </Form.Group>
-                <Button
-                    type='submit'
-                    variant='primary'>Sign In</Button>
+                <Button type='submit' variant='primary'>Sign In</Button>
+                
+                {loading && <Loader />}
+                {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
 
 
             </Form>

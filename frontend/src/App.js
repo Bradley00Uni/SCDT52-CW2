@@ -9,6 +9,7 @@ import LandingScreen from './Screens/LandingScreen'
 import ReviewScreen from './Screens/ReviewScreen'
 import GalleryScreen from './Screens/GalleryScreen'
 import ContactScreen from './Screens/ContactScreen'
+import AccountScreen from './Screens/AccountScreen'
 
 import LoginScreen from './Screens/LoginScreen'
 import RegisterScreen from './Screens/RegisterScreen'
@@ -31,6 +32,7 @@ function App() {
 
           <Route path='/login' component={LoginScreen} exact/>
           <Route path='/register' component={RegisterScreen} exact/>
+          <Route path='/account' component={AccountScreen} exact/>
           
         </Container>
       <Footer/>

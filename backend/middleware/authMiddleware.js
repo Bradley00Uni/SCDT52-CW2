@@ -10,7 +10,6 @@ const protect = async(req, res, next)=>{
     try{
         if (token){
        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-       console.log(decoded)
        req.user = await User.findById(decoded.id).select('-password')
        }
         if (!token){

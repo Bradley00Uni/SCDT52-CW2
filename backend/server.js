@@ -86,6 +86,7 @@ app.post('/api/users/login', async(req, res)=>{
             _id: user.id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
 
@@ -98,9 +99,9 @@ app.post('/api/users/login', async(req, res)=>{
 })
 
 //Register
-app.post('/api/users/', async(req, res) =>{
+app.post('/api/users', async(req, res) =>{
 
-    const {name, email, password} = req.body
+    const {name, email, phone, password} = req.body
 
     const userExists = await User.findOne({email})
 
@@ -112,6 +113,7 @@ app.post('/api/users/', async(req, res) =>{
     const user = await User.create({
         name,
         email,
+        phone,
         password
     })
 
@@ -120,6 +122,7 @@ app.post('/api/users/', async(req, res) =>{
             _id: user.id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
         })
@@ -131,7 +134,7 @@ app.post('/api/users/', async(req, res) =>{
 
 })
 
-app.get('api/users/profile', protect, async(req, res) =>{
+app.get('/api/users/profile', protect, async(req, res) =>{
 
     const user = await User.findById(req.user.id)
 
@@ -140,6 +143,7 @@ app.get('api/users/profile', protect, async(req, res) =>{
             _id: user.id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
         })
