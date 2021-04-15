@@ -46,7 +46,7 @@ const Header = ({match, history}) => {
                 <Link to='/'></Link><Nav.Link className="nav-text" href="/" class="navItem">Book an Appointment</Nav.Link>
                 <Link to='gallery'></Link><Nav.Link className="nav-text" href="/gallery" class="navItem">Gallery</Nav.Link>
                 <Link to='/contact'></Link><Nav.Link className="nav-text" href="/contact" class="navItem">Contact Me</Nav.Link>
-                <Link to='/login'></Link><Nav.Link className="nav-text" href="/login" class="navItem">Account</Nav.Link>
+                <Link to='/account'></Link><Nav.Link className="nav-text" href="/account" class="navItem">Account</Nav.Link>
             </Nav>
 
             {userInfo && <LinkContainer to='/'><Button className='btn btn-info mx-3' onClick={logoutHandler}>Logout</Button></LinkContainer>}

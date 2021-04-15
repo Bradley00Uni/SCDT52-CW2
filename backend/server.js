@@ -7,7 +7,7 @@ const connectDB = require('./config/db')
 const {notFound, errorHandler} = require('./middleware/errorMiddleware')
 
 //AUTHORISE MIDDLEWARE
-const protect = require('./middleware/authMiddleware')
+const {protect, adminCheck} = require('./middleware/authMiddleware')
 
 //LOGIN/REGISTER TOKEN GENERATION
 const generateToken = require('./utils/generateToken')
@@ -47,10 +47,110 @@ app.get('/api/cuts', async (req, res)=>{
 
 
 //APPOINTMENT ROUTES
-app.get('/api/appointments', async (req, res)=>{
+// Admin-only retrieval of all bookings 
+app.get('/api/appointments', protect, adminCheck, async (req, res)=>{
     const appointments = await Appointment.find({})
     res.json(appointments)
 })
+
+//get specific availablity for a day
+app.get('/api/appointments/day/:id', async(req, res)=>{
+    const day = req.params.id
+    const bookings = await Appointment.find({appointmentDate: day})
+
+    const slotTimes = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']
+    const bookedSlots = []
+
+    for(var i=0; i<bookings.length; i++){
+        bookedSlots.push(bookings[i].appointmentTime)
+    }
+
+    var available = slotTimes.filter((items) => !bookedSlots.includes(items))
+
+    res.json(available)
+})
+
+//Create new Booking
+app.post('/api/appointments', protect, async(req, res)=>{
+    console.log('booking request')
+
+    const {serviceId, appointmentDate, appointmentTime, note} = req.body
+    const loggedInUser = await User.findOne({_id:req.user._id})
+    const chosenService = await Service.findOne({_id: serviceId})
+
+    console.log(loggedInUser)
+
+    if(!loggedInUser){
+        res.status(401).json({message: 'User Not Found'})
+    }
+
+    if(!chosenService){
+        res.status(401).json({message: 'No Chosen Service'})
+    }
+
+    const appointment = await Appointment.create({
+        user: loggedInUser,
+        name: loggedInUser.name,
+        service: chosenService.service,
+        price: chosenService.price,
+        duration: chosenService.duration,
+        appointmentDate,
+        appointmentTime,
+        note
+    })
+
+    if(appointment){
+        res.status(201).json({
+            _id: appointment._id,
+            user: appointment.user.name,
+            service: appointment.service,
+            price: appointment.price,
+            appointmentDate: appointment.appointmentDate,
+            appointmentTime: appointment.appointmentTime, 
+            note: appointment.note
+        })
+    }
+    else{
+        res.status(400).json({message: 'Booking error - Incorrect Data'})
+        throw new Error('Invalid Data')
+    }
+})
+
+//User-specific bookings
+app.get('/api/appointments/myappointments', protect, async(req, res)=>{
+    console.log(req.user)
+
+    const myAppointments = await Appointment.find({user: req.user._id})
+
+    if(myAppointments){
+
+        if(myAppointments.length === 0){
+            res.json([])
+        }
+        else{
+            res.json(myAppointments)
+        }
+
+    }
+})
+
+//Update Booking to Confirmed (Admin-only)
+app.put('/api/appointments/:id', protect, adminCheck, async(req, res)=>{
+    console.log('Update Booking')
+
+    const appointment = await Appointment.findById(req.params.id)
+
+    if(appointment){
+        appointment.isConfirmed = true
+        const updatedApointment = await appointment.save()
+        res.json(updatedApointment)
+    }
+    else{
+        res.status(404).json({message: 'Booking not Found'})
+        throw new Error('Booking not Found')
+    }
+})
+
 
 
 //DAILY MESSAGE ROUTES
@@ -71,6 +171,11 @@ app.get('/api/reviews', async (req, res)=>{
 app.get('/api/services', async (req, res)=>{
     const services = await Service.find({})
     res.json(services)
+})
+
+app.get('/api/services/:id', async (req, res)=>{
+    const service = await Service.findById(req.params.id)
+    res.json(service)
 })
 
 //USER AUTHENTICATION AND LOGIN/REGISTRATION

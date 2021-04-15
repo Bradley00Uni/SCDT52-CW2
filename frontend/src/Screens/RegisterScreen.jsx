@@ -24,7 +24,7 @@ const RegisterScreen = ({history}) => {
 
     useEffect(()=>{
         if(userInfo){
-            history.push('/account')
+            history.push('/')
         }
     }, [history, userInfo])
 

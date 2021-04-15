@@ -23,7 +23,7 @@ const LoginScreen = ({ location, history }) => {
 
     useEffect(() => {
 
-        if(!userInfo){
+        if(userInfo){
             history.push('/')
         }
 
