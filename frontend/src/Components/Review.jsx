@@ -4,9 +4,6 @@ import Star from './Star'
 
 const Review = ({review}) => {
 
-    var dateString = review.createdAt.toString()
-    var dateFormat = dateString.substring(0,10)
-
     var blank = " "
     let items = []
 
@@ -21,10 +18,10 @@ const Review = ({review}) => {
                 <Card.Body>
                     <Card.Title>{review.title}</Card.Title>
                     <Card.Text>
-                        <p>{review.review}</p>
+                        <p>{review.body}</p>
                     </Card.Text>
                 </Card.Body>
-                <Card.Footer className="text-muted">{review.userId} - {dateFormat}</Card.Footer>
+                <Card.Footer className="text-muted"><span className='review-client'>{review.client}</span> - {review.createdAt.slice(0,10)}</Card.Footer>
             </Card>
         </Container>
     )

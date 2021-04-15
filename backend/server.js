@@ -78,8 +78,6 @@ app.post('/api/appointments', protect, async(req, res)=>{
     const loggedInUser = await User.findOne({_id:req.user._id})
     const chosenService = await Service.findOne({_id: serviceId})
 
-    console.log(loggedInUser)
-
     if(!loggedInUser){
         res.status(401).json({message: 'User Not Found'})
     }
@@ -161,9 +159,43 @@ app.get('/api/messages', async (req, res)=>{
 
 
 //REVIEW ROUTES
+//Retrieval of all reviews for display
 app.get('/api/reviews', async (req, res)=>{
     const reviews = await Review.find({})
     res.json(reviews)
+})
+
+app.post('/api/reviews', protect, async(req, res)=>{
+    console.log('review request')
+
+    const {title, body, rating} = req.body
+    const currentUser = await User.findOne({_id:req.user._id})
+
+    if(!currentUser){
+        res.status(401).json({message: 'User Not Found'})
+    }
+
+    const review = await Review.create({
+        user: currentUser,
+        client: currentUser.name,
+        title,
+        body,
+        rating
+    })
+
+    if(review){
+        res.status(201).json({
+            _id: review.id,
+            user: review.client,
+            title: review.title,
+            review: review.body,
+            rating: review.rating
+        })
+    }
+    else{
+        res.status(400).json({message: 'Error - Incorrect Data Provided'})
+        throw new Error('Invalid Data')
+    }
 })
 
 

@@ -61,9 +61,6 @@ const AccountScreen = ({history}) => {
                 dispatch(myAppointments())
                 setAdmin(false)
             }
-
-            for(var i=0; i<appointments.length; i++){
-            }
         }
     },[dispatch, history])
 

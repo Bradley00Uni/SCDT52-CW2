@@ -5,7 +5,7 @@ import { galleryListReducer } from './reducers/galleryReducers'
 import { userLoginReducer, userDetailsReducer, userRegisterReducer } from './reducers/userReducers'
 import { dailyMessagesReducer } from './reducers/dailyMessageReducers'
 import { serviceListReducer } from './reducers/serviceReducers'
-import { reviewListReducer } from './reducers/reviewReducers'
+import { createReviewReducer, reviewListReducer } from './reducers/reviewReducers'
 import { appointmentByDayReducer, appointmentConfirmReducer, appointmentListReducer, createAppointmentReducer, myAppointmentReducer } from './reducers/appointmentReducers'
 
 //USE REDUCERS
@@ -20,6 +20,7 @@ const reducer = combineReducers({
     serviceList:serviceListReducer,
     
     reviewList:reviewListReducer,
+    createReview:createReviewReducer,
 
     appointmentList:appointmentListReducer,
     myAppointment:myAppointmentReducer,
