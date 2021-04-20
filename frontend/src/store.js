@@ -4,7 +4,7 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import { galleryListReducer } from './reducers/galleryReducers'
 import { userLoginReducer, userDetailsReducer, userRegisterReducer } from './reducers/userReducers'
 import { dailyMessagesReducer } from './reducers/dailyMessageReducers'
-import { serviceListReducer } from './reducers/serviceReducers'
+import { serviceFindReducer, serviceListReducer } from './reducers/serviceReducers'
 import { createReviewReducer, reviewListReducer } from './reducers/reviewReducers'
 import { appointmentByDayReducer, appointmentConfirmReducer, appointmentListReducer, createAppointmentReducer, myAppointmentReducer } from './reducers/appointmentReducers'
 
@@ -17,7 +17,9 @@ const reducer = combineReducers({
     userDetails:userDetailsReducer,
     
     dailyMessages:dailyMessagesReducer,
+    
     serviceList:serviceListReducer,
+    serviceFind:serviceFindReducer,
     
     reviewList:reviewListReducer,
     createReview:createReviewReducer,

@@ -16,7 +16,7 @@ export const listReviews = () => async (dispatch) =>{
 
 
 //USER-CREATED NEW REVIEW
-export const createReview = (title, body, rating) => async (dispatch, getState) =>{
+export const createReview = (title, body, rating, anon) => async (dispatch, getState) =>{
     try{
         dispatch({type: 'CREATE_REVIEW_REQUEST'})
 
@@ -29,7 +29,7 @@ export const createReview = (title, body, rating) => async (dispatch, getState) 
         }
 
         //POST API DATA
-        const {data} = await axios.post('/api/reviews',{title, body, rating} ,config)
+        const {data} = await axios.post('/api/reviews',{title, body, rating, anon} ,config)
 
         dispatch({type: 'CREATE_REVIEW_SUCCESS', payload: data})
     }

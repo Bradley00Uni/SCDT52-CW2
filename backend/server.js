@@ -168,33 +168,59 @@ app.get('/api/reviews', async (req, res)=>{
 app.post('/api/reviews', protect, async(req, res)=>{
     console.log('review request')
 
-    const {title, body, rating} = req.body
+    const {title, body, rating, anon} = req.body
     const currentUser = await User.findOne({_id:req.user._id})
+    const anonymousUser = await User.findOne({_id:'607edbf604d35c0db8d5fc8b'})
 
     if(!currentUser){
         res.status(401).json({message: 'User Not Found'})
     }
-
-    const review = await Review.create({
-        user: currentUser,
-        client: currentUser.name,
-        title,
-        body,
-        rating
-    })
-
-    if(review){
-        res.status(201).json({
-            _id: review.id,
-            user: review.client,
-            title: review.title,
-            review: review.body,
-            rating: review.rating
+    
+    if(anon){
+        const review = await Review.create({
+            user: anonymousUser,
+            client: anonymousUser.name,
+            title,
+            body,
+            rating
         })
+
+        if(review){
+            res.status(201).json({
+                _id: review.id,
+                user: review.client,
+                title: review.title,
+                review: review.body,
+                rating: review.rating
+            })
+        }
+        else{
+            res.status(400).json({message: 'Error - Incorrect Data Provided'})
+            throw new Error('Invalid Data')
+        }
     }
     else{
-        res.status(400).json({message: 'Error - Incorrect Data Provided'})
-        throw new Error('Invalid Data')
+        const review = await Review.create({
+            user: currentUser,
+            client: currentUser.name,
+            title,
+            body,
+            rating
+        })
+
+        if(review){
+            res.status(201).json({
+                _id: review.id,
+                user: review.client,
+                title: review.title,
+                review: review.body,
+                rating: review.rating
+            })
+        }
+        else{
+            res.status(400).json({message: 'Error - Incorrect Data Provided'})
+            throw new Error('Invalid Data')
+        }
     }
 })
 
@@ -203,6 +229,11 @@ app.post('/api/reviews', protect, async(req, res)=>{
 app.get('/api/services', async (req, res)=>{
     const services = await Service.find({})
     res.json(services)
+})
+
+app.get('/api/services/find', async (req,res)=>{
+    const chosenService = await Service.findOne({service:req.user.id})
+    res.json(chosenService.id)
 })
 
 app.get('/api/services/:id', async (req, res)=>{

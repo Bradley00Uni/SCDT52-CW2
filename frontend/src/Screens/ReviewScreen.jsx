@@ -7,12 +7,16 @@ import {listReviews} from '../actions/reviewActions'
 
 import Loader from '../Components/Loader'
 import ErrorMessage from '../Components/ErrorMessage'
+import ReviewForm from '../Components/ReviewForm'
 
 const ReviewScreen = () => {
 
     const dispatch = useDispatch()
     const reviewList = useSelector(state => state.reviewList)
     const {loading,error, reviews} = reviewList
+
+    const userLogin = useSelector(state => state.userLogin)
+    const {userInfo} = userLogin
 
     useEffect(()=>{
         dispatch(listReviews())
@@ -33,10 +37,12 @@ const ReviewScreen = () => {
             <Row>
                 <hr class="section-divide col-md-12" id="first-divide"/>
             </Row>
-            <h1 class="header-text">Leave a Review:</h1>
-            <Row>
-                <p class="temporary-padding">Form goes here</p>
-            </Row>
+
+            {!userInfo || userInfo.length < 1 ?(
+                <></>
+            ):(
+                <ReviewForm />
+            )}
         </div>
     )
 }

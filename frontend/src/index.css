@@ -101,3 +101,27 @@
   color: #20c997;
 }
 
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+    display: block;
+    width: 100%;
+}
+
+.appointment-form, .review-form{
+  margin-top: 3%;
+  border: dashed white 2px;
+  padding: 20px;
+}
+
+.form-divide{
+  margin-top: 6%;
+}
+.form-note-divide{
+  margin-top: 3%;
+}
+
+.rating-button{
+  margin-right: 7px;
+}
