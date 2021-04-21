@@ -71,7 +71,7 @@ app.get('/api/appointments/day/:id', async(req, res)=>{
 })
 
 //Create new Booking
-app.post('/api/appointments', protect, adminCheck, async(req, res)=>{
+app.post('/api/appointments', protect, async(req, res)=>{
     console.log('booking request')
 
     const {serviceId, appointmentDate, appointmentTime, note} = req.body
