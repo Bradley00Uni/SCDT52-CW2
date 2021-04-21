@@ -54,15 +54,15 @@ export const appointmentByDayReducer = (state = {dayAppointments: []}, action) =
 }
 
 
-export const appointmentConfirmReducer = (state = {}, action) => {
+export const appointmentUpdateReducer = (state = {}, action) => {
     switch(action.type){
-        case 'CONFIRM_APPOINTMENT_REQUEST':
+        case 'UPDATE_APPOINTMENT_REQUEST':
             return {loading:true}
-        case 'CONFIRM_APPOINTMENT_SUCCESS':
+        case 'UPDATE_APPOINTMENT_SUCCESS':
             return {loading:false, success:true}
-        case 'CONFIRM_APPOINTMENT_FAIL':
+        case 'UPDATE_APPOINTMENT_FAIL':
             return {loading: false, error: action.payload}
-        case 'CONFIRM_APPOINTMENT_RESET':
+        case 'UPDATE_APPOINTMENT_RESET':
             return {}
         default:
             return state

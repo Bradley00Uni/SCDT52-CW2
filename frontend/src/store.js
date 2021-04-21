@@ -6,7 +6,7 @@ import { userLoginReducer, userDetailsReducer, userRegisterReducer } from './red
 import { dailyMessagesReducer } from './reducers/dailyMessageReducers'
 import { serviceFindReducer, serviceListReducer } from './reducers/serviceReducers'
 import { createReviewReducer, reviewListReducer } from './reducers/reviewReducers'
-import { appointmentByDayReducer, appointmentConfirmReducer, appointmentListReducer, createAppointmentReducer, myAppointmentReducer } from './reducers/appointmentReducers'
+import { appointmentByDayReducer, appointmentListReducer, appointmentUpdateReducer, createAppointmentReducer, myAppointmentReducer } from './reducers/appointmentReducers'
 
 //USE REDUCERS
 const reducer = combineReducers({
@@ -28,7 +28,7 @@ const reducer = combineReducers({
     myAppointment:myAppointmentReducer,
     createAppointment:createAppointmentReducer,
     appointmentByDay:appointmentByDayReducer,
-    appointmentConfirm:appointmentConfirmReducer
+    appointmentUpdate:appointmentUpdateReducer
 })
 
 //Initial state = empty

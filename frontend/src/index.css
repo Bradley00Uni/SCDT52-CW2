@@ -1,5 +1,10 @@
-.nav-text{
+.nav-text, #navbarDropdown{
   color: white !important;
+}
+
+.drop-text{
+  color:#00bc8c !important;
+ 
 }
 
 .header-text{
@@ -94,7 +99,7 @@
 }
 
 .table-head{
-  background-color: #3498db;
+  background-color: #375a7f;
 }
 
 .review-client{
@@ -109,10 +114,11 @@
     width: 100%;
 }
 
-.appointment-form, .review-form{
+.review-form, .appointment-form{
   margin-top: 3%;
   border: dashed white 2px;
   padding: 20px;
+  background-color: #444;
 }
 
 .form-divide{

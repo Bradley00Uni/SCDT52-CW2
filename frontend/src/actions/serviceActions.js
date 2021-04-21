@@ -14,11 +14,20 @@ export const listServices = () => async (dispatch) =>{
     }
 }
 
-export const findService = (name) => async (dispatch) =>{
+export const findService = (service) => async (dispatch, getState) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE
         dispatch({type: 'SERVICE_FIND_REQUEST'})
-        const {data} = await axios.get(`/api/services/${name}`)
+
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers:{
+                Authorization: userInfo.token
+            }
+        }
+
+        const {data} = await axios.post(`/api/services/${service._id}`, {service}, config)
 
         dispatch({type: 'SERVICE_FIND_SUCCESS', payload: data})
     }

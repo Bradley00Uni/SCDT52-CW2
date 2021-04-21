@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react'
 
 import banner from '../siteImages/grunge_banner.png'
-import {Nav, Navbar, Image, Row, Col, Button} from 'react-bootstrap'
+import {Nav, Navbar, Image, Row, Col, Button, NavDropdown} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import {useDispatch, useSelector} from 'react-redux'
 
 import {listMessages} from '../actions/dailyMessageActions'
-import DailyMessage from '../Components/DailyMessage'
+import DailyMessage from './DailyMessage'
 
 import {logout} from '../actions/userActions'
 
@@ -57,7 +57,14 @@ const Header = ({match, history}) => {
                 <Link to='/appointment'></Link><Nav.Link className="nav-text" href="/appointment" class="navItem">Book an Appointment</Nav.Link>
                 <Link to='gallery'></Link><Nav.Link className="nav-text" href="/gallery" class="navItem">Gallery</Nav.Link>
                 <Link to='/contact'></Link><Nav.Link className="nav-text" href="/contact" class="navItem">Contact Me</Nav.Link>
-                <Link to='/account'></Link><Nav.Link className="nav-text" href="/account" class="navItem">{loginText}</Nav.Link>
+                <NavDropdown title="Admin Panel" id='navbarDropdown'>
+                    <NavDropdown.Item className='drop-text' href="/admin/appointments">Appointments</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/services" className="drop-text">Services</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/messages" className="drop-text">Daily Messages</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/users" className="drop-text">Users</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className="nav-text" href="/account">Your {loginText}</NavDropdown.Item>
+                </NavDropdown>
             </Nav>
             { showButton && <LinkContainer to='/'><Button className='btn btn-danger mx-3' onClick={logoutHandler}>Logout</Button></LinkContainer>}
 

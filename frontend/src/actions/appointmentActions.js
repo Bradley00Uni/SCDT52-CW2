@@ -74,10 +74,10 @@ export const createAppointment = (serviceId, appointmentDate, appointmentTime, n
 }
 
 
-//ADMIN-CONFIRMED APPOINTMENT
-export const confirmAppointment = (appointment) => async (dispatch, getState) =>{
+//ADMIN-UPDATED APPOINTMENT
+export const updateAppointment = (passed, action) => async (dispatch, getState) =>{
     try{
-        dispatch({type: 'CONFIRM_APPOINTMENT_REQUEST'})
+        dispatch({type: 'UPDATE_APPOINTMENT_REQUEST'})
 
         const {userLogin:{userInfo}} = getState()
 
@@ -88,12 +88,12 @@ export const confirmAppointment = (appointment) => async (dispatch, getState) =>
         }
 
         //PUT API DATA
-        const {data} = await axios.put(`/api/appointments/${appointment._id}`,{appointment} ,config)
+        const {data} = await axios.put(`/api/appointments/${passed}`,{passed, action} ,config)
 
-        dispatch({type: 'CONFIRM_APPOINTMENT_SUCCESS', payload: data})
+        dispatch({type: 'UPDATE_APPOINTMENT_SUCCESS', payload: data})
     }
     catch(error){
-        dispatch({type: 'CONFIRM_APPOINTMENT_FAIL', payload: error.message})
+        dispatch({type: 'UPDATE_APPOINTMENT_FAIL', payload: error.message})
     }
 }
 

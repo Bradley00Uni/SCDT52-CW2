@@ -71,7 +71,7 @@ app.get('/api/appointments/day/:id', async(req, res)=>{
 })
 
 //Create new Booking
-app.post('/api/appointments', protect, async(req, res)=>{
+app.post('/api/appointments', protect, adminCheck, async(req, res)=>{
     console.log('booking request')
 
     const {serviceId, appointmentDate, appointmentTime, note} = req.body
@@ -114,6 +114,7 @@ app.post('/api/appointments', protect, async(req, res)=>{
     }
 })
 
+
 //User-specific bookings
 app.get('/api/appointments/myappointments', protect, async(req, res)=>{
     console.log(req.user)
@@ -132,23 +133,46 @@ app.get('/api/appointments/myappointments', protect, async(req, res)=>{
     }
 })
 
-//Update Booking to Confirmed (Admin-only)
+//Update Booking (Admin-only)
 app.put('/api/appointments/:id', protect, adminCheck, async(req, res)=>{
     console.log('Update Booking')
 
-    const appointment = await Appointment.findById(req.params.id)
+   const {passed, action} = req.body
+    const appointment = await Appointment.findOne({_id: passed})
 
-    if(appointment){
-        appointment.isConfirmed = true
-        const updatedApointment = await appointment.save()
-        res.json(updatedApointment)
+    if(action == 'Confirm'){
+        if(appointment){
+            appointment.isConfirmed = true
+            const updatedApointment = await appointment.save()
+        }
+        else{
+            res.status(404).json({message: 'Booking not Found'})
+            throw new Error('Booking not Found')
+        }
     }
-    else{
-        res.status(404).json({message: 'Booking not Found'})
-        throw new Error('Booking not Found')
+    else if(action == 'Complete'){
+        if(appointment){
+            appointment.isComplete = true
+            const updatedApointment = await appointment.save()
+        }
+        else{
+            res.status(404).json({message: 'Booking not Found'})
+            throw new Error('Booking not Found')
+        }
     }
+    else if(action == 'Delete'){
+        if(appointment){
+            await Appointment.deleteOne(appointment)
+            console.log(':)')
+        }
+        else{
+            res.status(404).json({message: 'Booking not Found'})
+            throw new Error('Booking not Found')
+        }
+    }
+
+    
 })
-
 
 
 //DAILY MESSAGE ROUTES
@@ -231,15 +255,16 @@ app.get('/api/services', async (req, res)=>{
     res.json(services)
 })
 
-app.get('/api/services/find', async (req,res)=>{
-    const chosenService = await Service.findOne({service:req.user.id})
-    res.json(chosenService.id)
+app.post('/api/services/:id', protect, adminCheck, async (req, res)=>{
+
+    const {service} = req.body
+   await Service.deleteOne(service)
+   res.json('Service Deleted')
 })
 
-app.get('/api/services/:id', async (req, res)=>{
-    const service = await Service.findById(req.params.id)
-    res.json(service)
-})
+
+
+
 
 //USER AUTHENTICATION AND LOGIN/REGISTRATION
 //Login

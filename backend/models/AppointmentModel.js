@@ -39,20 +39,11 @@ const appointmentSchema = mongoose.Schema({
         required: true,
         default: false
     },
-    isPaid:{
-        type: Boolean,
-        required: true,
-        default: false
-    },
     isComplete:{
         type: Boolean,
         required: true,
         default: false
-    },
-    paidAt:{
-        type: Date,
     }
-
 },{
     timestamps:true
 })
