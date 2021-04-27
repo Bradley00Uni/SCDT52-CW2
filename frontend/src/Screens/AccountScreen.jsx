@@ -30,8 +30,6 @@ const AccountScreen = ({history}) => {
     const {allLoading, allError, allAppointments} = appointmentList
 
 
-    
-
     useEffect(()=>{
 
         if(!userInfo || userInfo.length < 1 || error){
@@ -57,6 +55,12 @@ const AccountScreen = ({history}) => {
         }
     },[dispatch, history])
 
+    const deleteRequest = () => {
+        const email = 'kaye_the_barber@outlook.com'
+
+            window.open(`mailto:${email}?subject=Kaye_the_Barber.co.uk: Account Deletion Request&body=This is a request for the deletion of my account (user: ${userInfo._id}, name: ${userInfo.name}) from the kaye_the_barber.co.uk website. I no longer wish to have my personal information stored there, including my contact number and email address.`)
+    }
+
 
         return (
             <div>
@@ -78,11 +82,17 @@ const AccountScreen = ({history}) => {
                         </Col>
                     </Row>
                     <Row className="button-row">
-                        <Col sm={1} md={3} lg={2} />
-                        <Col sm={10} md={6} lg={8} className="align-items-center">
-                            <Link to=''><Button href='#top' variant='outline-info' size='lg' block>Edit your Details </Button></Link>
+                        <Col sm={12} md={12} lg={12} className="align-items-center">
+                            <Link to='/account/edit/details'><Button href='#top' variant='outline-info' size='lg' block>Edit your Details </Button></Link>
                         </Col>
-                        <Col sm={1} md={3} lg={2} />
+                    </Row>
+                    <Row className="button-row">
+                        <Col sm={12} md={6} lg={6} className="align-items-center">
+                            <Link to='/account/edit/password'><Button href='#top' variant='outline-warning' size='lg' block>Change your Password</Button></Link>
+                        </Col>
+                        <Col sm={12} md={6} lg={6} className="align-items-center">
+                            <Button onClick={deleteRequest} variant='outline-danger' size='lg' block>Request Account Deletion</Button>
+                        </Col>
                     </Row>
                 </Container>
 

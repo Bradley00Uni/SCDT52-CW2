@@ -24,6 +24,9 @@ import RegisterScreen from './Screens/RegisterScreen'
 import Header from './Components/Header'
 import Footer from './Components/Footer'
 import AdminHeader from './Components/AdminHeader'
+import ManageGalleryScreen from './Screens/AdminOnly/ManageGalleryScreen';
+import AccountEditScreen from './Screens/AccountEditScreen';
+import PasswordEditScreen from './Screens/PasswordEditScreen';
 
 function App() {
 
@@ -50,11 +53,14 @@ function App() {
           <Route path='/login' component={LoginScreen} exact/>
           <Route path='/register' component={RegisterScreen} exact/>
           <Route path='/account' component={AccountScreen} exact/>
+          <Route path='/account/edit/details' component={AccountEditScreen} exact/>
+          <Route path='/account/edit/password' component={PasswordEditScreen} exact/>
 
           <Route path='/admin/appointments' component={ManageAppointmentsScreen} exact/>
           <Route path='/admin/services' component={ManageServicesScreen} exact/>
           <Route path='/admin/users' component={ManageUsersScreen} exact/>
           <Route path='/admin/messages' component={ManageMessagesScreen} exact/>
+          <Route path='/admin/gallery' component={ManageGalleryScreen} exact/>
           
         </Container>
       <Footer/>

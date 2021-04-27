@@ -40,9 +40,34 @@ app.get('/', (req, res)=>{
 
 
 //GALLERY ROUTES
+//Return all Gallery Entries
 app.get('/api/cuts', async (req, res)=>{
     const cuts = await ExampleCut.find({})
     res.json(cuts)
+})
+
+//Admin Only - Add new Entry
+app.post('/api/cuts', protect, adminCheck, async(req,res)=>{
+    const {caption, imageURL} = req.body
+
+    const image = await ExampleCut.create({
+        imageURL: imageURL,
+        description: caption
+    })
+
+    if(!image){
+        res.status(400)
+        throw new Error("Invalid Details Provided")
+    }
+})
+
+//Admin Only - Delete an Entry
+app.post('/api/cuts/:id', protect, adminCheck, async(req,res)=>{
+    const {image} = req.body
+
+    const deleteImage = await ExampleCut.deleteOne(image)
+
+    res.json('Gallery Entry Deleted')
 })
 
 
@@ -163,7 +188,6 @@ app.put('/api/appointments/:id', protect, adminCheck, async(req, res)=>{
     else if(action == 'Delete'){
         if(appointment){
             await Appointment.deleteOne(appointment)
-            console.log(':)')
         }
         else{
             res.status(404).json({message: 'Booking not Found'})
@@ -176,10 +200,34 @@ app.put('/api/appointments/:id', protect, adminCheck, async(req, res)=>{
 
 
 //DAILY MESSAGE ROUTES
+//Return all Messages
 app.get('/api/messages', async (req, res)=>{
     const dailyMessages = await DailyMessage.find({})
     res.json(dailyMessages)
 })
+
+//Add new Message
+app.post('/api/messages', protect, adminCheck, async(req,res)=>{
+    const {messageText} = req.body
+
+    const dailyMessage = await DailyMessage.create({
+        message: messageText
+    })
+
+    if(!dailyMessage){
+        res.status(400).json({message: 'Error - Incorrect Data Provided'})
+        throw new Error('Invalid Data')
+    }
+})
+
+//Delete Message
+app.post('/api/messages/:id', protect, adminCheck, async(req,res)=>{
+    const dailyMessage = req.body
+    await DailyMessage.deleteOne(dailyMessage)
+    res.json('Daily Message Deleted')
+})
+
+
 
 
 //REVIEW ROUTES
@@ -253,6 +301,25 @@ app.post('/api/reviews', protect, async(req, res)=>{
 app.get('/api/services', async (req, res)=>{
     const services = await Service.find({})
     res.json(services)
+})
+
+app.post('/api/services', protect, adminCheck, async(req, res)=>{
+    console.log('Service Creation')
+
+    const {haircut, price, duration, image} = req.body
+
+    const service = await Service.create({
+        service: haircut,
+        price: price,
+        duration: duration,
+        imageURL: image
+    })
+
+    if(!service){
+        res.status(400).json({message: 'Service error - Incorrect Data'})
+        throw new Error('Invalid Data')
+    }
+
 })
 
 app.post('/api/services/:id', protect, adminCheck, async (req, res)=>{
@@ -347,6 +414,59 @@ app.get('/api/users/profile', protect, async(req, res) =>{
     }
 
 })
+
+//Update Contact Details
+app.put('/api/users/:profile/contact', protect, async(req, res)=>{
+    const {currentUser, email, phone} = req.body
+
+    const userFind = await User.findOne({_id: currentUser})
+
+    if(userFind){
+        userFind.email = email
+        userFind.phone = phone
+
+        const update = await userFind.save()
+        res.json('Contact Details Selected')
+    }
+    else{
+        res.status(404).json({message: 'Details could not be updated'})
+        throw new Error('Details could not be updated')
+    }
+})
+
+//Update Password
+app.put('/api/users/:profile/password', protect, async(req, res)=>{
+    const {currentUser, currentPassword, newPassword} = req.body
+
+    const userFind = await User.findOne({_id: currentUser})
+
+    if(userFind && (await userFind.matchPassword(currentPassword))){
+        userFind.password = newPassword
+       
+        const update = await userFind.save()
+        res.json('Contact Details Selected')
+    }
+    else{
+        res.status(404).json({message: 'Details could not be updated'})
+        throw new Error('Details could not be updated')
+    }
+})
+
+
+//ADMIN ONLY - RETURN ALL USERS
+app.get('/api/users', protect, adminCheck, async(req, res) =>{
+    const users = await User.find({})
+    res.json(users)
+})
+
+//ADMIN ONLY - DELETE A USER
+app.post('/api/users/:id', protect, adminCheck, async(req, res) => {
+    const {account} = req.body
+    await User.deleteOne(account)
+    res.json('Deleted User')
+})
+
+
 
 
 //ERROR HANDLING

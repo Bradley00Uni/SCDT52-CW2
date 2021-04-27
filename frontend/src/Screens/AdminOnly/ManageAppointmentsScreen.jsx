@@ -59,11 +59,11 @@ const ManageAppointmentsScreen = ({history}) => {
                 {allLoading && <Loader />}
                 {allError && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
 
-                <Col sm={12} md={10} lg={12}>
+                <Col sm={12} md={12} lg={12}>
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead className='table-head'>
                         <tr>
-                            <th>Booking Reference</th>
+                            <th>Reference</th>
                             <th>Date</th>
                             <th>Time</th>
                             <th>Client</th>

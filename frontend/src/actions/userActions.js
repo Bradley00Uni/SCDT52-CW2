@@ -89,6 +89,112 @@ export const register = (name, email, phone, password) => async(dispatch) => {
 }
 
 
+//ADMIN ONLY - ALL USERS
+export const allUsers = () => async(dispatch, getState) => {
+    try{
+        dispatch({
+            type: 'ALL_USERS_REQUEST'
+        })
+
+        const {userLogin: {userInfo}} = getState();
+
+        const config = {
+            headers:{
+                'Content-Type': 'application/json',
+                Authorization: userInfo.token
+            }
+        }
+        const {data} = await axios.get('/api/users', config)
+        dispatch({
+            type: 'ALL_USERS_SUCCESS',
+            payload: data
+        })
+    }
+    catch(error){
+         dispatch({
+            type: 'ALL_USERS_FAIL',
+            payload:error.response && error.response.data.message ? error.response.data.message: error.message
+        })
+    }
+}
+
+
+//ADMIN ONLY - DELETE A USER
+export const deleteUser = (account) => async(dispatch, getState) => {
+    try{
+        dispatch({
+            type: 'DELETED_USER_REQUEST'
+        })
+
+        const {userLogin: {userInfo}} = getState();
+
+        const config = {
+            headers:{
+                'Content-Type': 'application/json',
+                Authorization: userInfo.token
+            }
+        }
+        const {data} = await axios.post(`/api/users/${account.id}`, {account}, config)
+        dispatch({
+            type: 'DELETED_USER_SUCCESS',
+            payload: data
+        })
+    }
+    catch(error){
+         dispatch({
+            type: 'DELETED_USER_FAIL',
+            payload:error.response && error.response.data.message ? error.response.data.message: error.message
+        })
+    }
+}
+
+
+//USER-UPDATED 
+export const updateUser = (currentUser, email, phone) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: 'UPDATE_USER_REQUEST'})
+
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers:{
+                Authorization: userInfo.token
+            }
+        }
+
+        //PUT API DATA
+        const {data} = await axios.put(`/api/users/${currentUser}/contact`,{currentUser, email, phone} ,config)
+
+        dispatch({type: 'UPDATE_USER_SUCCESS', payload: data})
+    }
+    catch(error){
+        dispatch({type: 'UPDATE_USER_FAIL', payload: error.message})
+    }
+}
+
+
+export const updatePassword = (currentUser, currentPassword, newPassword) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: 'UPDATE_PASSWORD_REQUEST'})
+
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers:{
+                Authorization: userInfo.token
+            }
+        }
+
+        //PUT API DATA
+        const {data} = await axios.put(`/api/users/${currentUser}/password`,{currentUser, currentPassword, newPassword} ,config)
+
+        dispatch({type: 'UPDATE_PASSWORD_SUCCESS', payload: data})
+    }
+    catch(error){
+        dispatch({type: 'UPDATE_PASSWORD_FAIL', payload: error.message})
+    }
+}
+
 //LOGOUT USER
 export const logout = () =>(dispatch)=>{
     localStorage.removeItem('userInfo')

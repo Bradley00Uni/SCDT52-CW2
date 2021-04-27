@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../Components/Loader'
 import ErrorMessage from '../../Components/ErrorMessage'
 
-import {listServices, findService} from '../../actions/serviceActions'
+import ReviewFormContainer from '../../Components/ReviewFormContainer'
+
+import {listServices, findService, createService} from '../../actions/serviceActions'
 
 const ManageServicesScreen = ({history}) => {
 
-    const [service, setService] = useState('')
+    const [haircut, setHaircut] = useState('')
     const [price, setPrice] = useState('')
     const [duration, setDuration] = useState('')
     const [image, setImage] = useState('')
@@ -19,7 +21,6 @@ const ManageServicesScreen = ({history}) => {
 
     const userDetails = useSelector(state => state.userDetails)
     const {loading, error, user} = userDetails
-
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
@@ -38,11 +39,19 @@ const ManageServicesScreen = ({history}) => {
         dispatch(listServices())
     },[dispatch, history])
 
+    const submitHandler = (e) => {
+        console.log(haircut, price, duration, image)
+        dispatch(createService(haircut, price, duration, image))
+        window.location.reload()
+    }
+
 
     const DeleteService = (service) => {
         dispatch(findService(service))
         window.location.reload()
     }
+
+    
 
     return (
         <div>
@@ -51,7 +60,7 @@ const ManageServicesScreen = ({history}) => {
                 {serviceLoading && <Loader />}
                 {serviceError && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
 
-                <Col sm={12} md={10} lg={12}>
+                <Col sm={12} md={12} lg={12}>
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead className='table-head'>
                         <tr>
@@ -81,7 +90,67 @@ const ManageServicesScreen = ({history}) => {
             </Container>
 
             <Container>
-            <   h1 className='header-text'>ADD A SERVICE</h1>
+            <ReviewFormContainer>
+                <Form onSubmit={submitHandler} className='service-form'>
+                    <h1 className='header-text'>ADD A SERVICE</h1>
+                    <Row className='service-form-row'>
+                        <Col sm={6} md={6} lg={2}>
+                            <h4>Haircut</h4>
+                        </Col>
+                        <Col sm={6} md={6} lg={4}>
+                            <FormControl
+                            placeholder='Haircut'
+                            maxLength='40'
+                            onChange={(e)=>setHaircut(e.target.value)}
+                            ></FormControl>
+                        </Col>
+                        <Col sm={6} md={6} lg={4}>
+                            <FormControl
+                            placeholder='Price (£)'
+                            onChange={(e)=>setPrice(e.target.value)}
+                            ></FormControl>
+                        </Col>
+                        <Col sm={6} md={6} lg={2}>
+                            <h4>Price</h4>
+                        </Col>
+                    </Row>
+
+                    <Row className='service-form-row'>
+                        <Col sm={6} md={6} lg={2}>
+                            <h4>Image URL</h4>
+                        </Col>
+                        <Col sm={6} md={6} lg={4}>
+                            <FormControl
+                            placeholder='images/cuts/(ImageURL)'
+                            maxLength='40'
+                            onChange={(e)=>setImage(e.target.value)}
+                            ></FormControl>
+                        </Col>
+                        <Col sm={6} md={6} lg={4}>
+                            <FormControl
+                            placeholder='Duration (minutes)'
+                            onChange={(e)=>setDuration(e.target.value)}
+                            ></FormControl>
+                        </Col>
+                        <Col sm={6} md={6} lg={2}>
+                            <h4>Duration</h4>
+                        </Col>
+                    </Row>
+
+                    <Row className='service-form-row'>
+                        <Col md={1} lg={2}></Col>
+                        <Col sm={12} md={10} lg={8}>
+                                <Button
+                                onClick={submitHandler}
+                                size='lg'
+                                className='btn btn-block rounded btn-success'
+                                >Create Service
+                                </Button>   
+                        </Col>
+                        <Col md={1} lg={2}></Col>
+                    </Row>
+                </Form>
+            </ReviewFormContainer>
             </Container>
         </div>
     )

@@ -3,7 +3,12 @@ import { Container, Card } from 'react-bootstrap'
 
 const GalleryImage = ({exampleCut}) => {
 
-    var dateString = exampleCut.uploadDate.toString()
+    if(exampleCut.uploadDate){
+        var dateString = exampleCut.uploadDate.toString()
+    }
+    else if(exampleCut.createdAt){
+        var dateString = exampleCut.createdAt.toString()
+    }
     var dateFormat = dateString.substring(0,10)
     
 

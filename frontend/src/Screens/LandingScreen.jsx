@@ -80,7 +80,7 @@ const LandingScreen = () => {
             <Row className="button-row bottom-row">
                 <Col sm={1} md={3} lg={3} />
                 <Col sm={10} md={6} lg={6} className="align-items-center">
-                    <Link to='/contact'><Button href='#top' variant='outline-success' size='lg' block>Get in Contact</Button></Link>
+                    <Link to='/contact'><Button href variant='outline-success' size='lg' block>Get in Contact</Button></Link>
                 </Col>
                 <Col sm={1} md={3} lg={3} />
             </Row>

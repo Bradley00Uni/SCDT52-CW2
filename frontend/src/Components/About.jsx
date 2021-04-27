@@ -1,5 +1,11 @@
 import React from 'react'
 import { Container, Card, Col, Row } from 'react-bootstrap'
+import {
+    BrowserView,
+    MobileView,
+    isBrowser,
+    isMobile
+  } from "react-device-detect"
 
 import MessagePicture from './MessagePicture'
 
@@ -15,7 +21,12 @@ const About = () => {
             </p>
             </Col>
             <Col sm={0} md={6} lg={6}>
-                <MessagePicture />
+                {isMobile ? (
+                    <></>
+                ) : (
+                    <MessagePicture /> 
+                )}
+               
             </Col>
         </Row>
     )

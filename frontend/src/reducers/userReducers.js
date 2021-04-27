@@ -45,3 +45,57 @@ export const userRegisterReducer = (state = {}, action) =>{
             return state
     } 
 }
+
+export const allUsersReducer = (state = {users:[]}, action) =>{
+    switch(action.type){
+        case 'ALL_USERS_REQUEST':
+            return {loading:true, users:[]}
+        case 'ALL_USERS_SUCCESS':
+            return {loading:false, users: action.payload}
+        case 'ALL_USERS_FAIL':
+            return {loading: false, error: action.payload}
+        default:
+            return state
+    } 
+}
+
+export const deleteUserReducer = (state = {deletedUser:{}}, action) =>{
+    switch(action.type){
+        case 'DELETED_USER_REQUEST':
+            return {loading:true, deletedUser:[]}
+        case 'DELETED_USER_SUCCESS':
+            return {loading:false, deletedUser: action.payload}
+        case 'DELETED_USER_FAIL':
+            return {loading: false, error: action.payload}
+        default:
+            return state
+    } 
+}
+
+
+export const updateUserReducer = (state = {}, action) =>{
+    switch(action.type){
+        case 'UPDATE_USER_REQUEST':
+            return {loading:true}
+        case 'UPDATE_USER_SUCCESS':
+            return {loading:false, success:true}
+        case 'UPDATE_USER_FAIL':
+            return {loading: false, error: action.payload}
+        default:
+            return state
+    } 
+}
+
+
+export const updatePasswordReducer = (state = {}, action) =>{
+    switch(action.type){
+        case 'UPDATE_PASSWORD_REQUEST':
+            return {loading:true}
+        case 'UPDATE_PASSWORD_SUCCESS':
+            return {loading:false, success:true}
+        case 'UPDATE_PASSWORD_FAIL':
+            return {loading: false, error: action.payload}
+        default:
+            return state
+    } 
+}

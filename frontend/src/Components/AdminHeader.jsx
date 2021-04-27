@@ -59,8 +59,9 @@ const Header = ({match, history}) => {
                 <Link to='/contact'></Link><Nav.Link className="nav-text" href="/contact" class="navItem">Contact Me</Nav.Link>
                 <NavDropdown title="Admin Panel" id='navbarDropdown'>
                     <NavDropdown.Item className='drop-text' href="/admin/appointments">Appointments</NavDropdown.Item>
-                    <NavDropdown.Item href="/admin/services" className="drop-text">Services</NavDropdown.Item>
                     <NavDropdown.Item href="/admin/messages" className="drop-text">Daily Messages</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/gallery" className="drop-text">Gallery</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/services" className="drop-text">Services</NavDropdown.Item>
                     <NavDropdown.Item href="/admin/users" className="drop-text">Users</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item className="nav-text" href="/account">Your {loginText}</NavDropdown.Item>

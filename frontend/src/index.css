@@ -3,7 +3,7 @@
 }
 
 .drop-text{
-  color:#00bc8c !important;
+  color: #3498db !important;
  
 }
 
@@ -11,6 +11,10 @@
    margin-top: 4%;
    margin-bottom: 4%;
    font-family: 'Chelsea Market', cursive !important;
+}
+
+.contact-header{
+   font-family: 'New Tegomin', serif !important;
 }
 
 .align-nav{
@@ -118,7 +122,16 @@
   margin-top: 3%;
   border: dashed white 2px;
   padding: 20px;
-  background-color: #444;
+}
+
+.service-form, .gallery-form{
+  margin-top: 3%;
+  border: dashed white 2px;
+  padding: 20px;
+}
+
+.message-form{
+  margin-top: 7%;
 }
 
 .form-divide{
@@ -130,4 +143,16 @@
 
 .rating-button{
   margin-right: 7px;
+}
+
+.service-form-row, .gallery-form-row, .password-form-row{
+  margin-bottom: 2%;
+}
+.message-form-row{
+  margin-top: 2%;
+}
+
+.password-form-row-top{
+  margin-bottom: 6%;
+  margin-top: 6%;
 }
