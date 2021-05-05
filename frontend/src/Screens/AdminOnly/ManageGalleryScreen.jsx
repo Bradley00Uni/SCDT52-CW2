@@ -14,21 +14,25 @@ const ManageGalleryScreen = ({history}) => {
     const [caption, setCaption] = useState('')
     const [imageURL, setImageURL] = useState('')
 
+    const [message, setMessage] = useState('')
+    const [success, setSuccess] = useState('')
+    const [deleteSuccess, setDeleteSuccess] = useState('')
+
     const dispatch = useDispatch()
 
     const userDetails = useSelector(state => state.userDetails)
-    const {loading, error, user} = userDetails
+    const {error} = userDetails
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
     const galleryList = useSelector(state => state.galleryList) 
-    const {galleryLoading,galleryError, exampleCuts} = galleryList
+    const {loading, exampleCuts} = galleryList
 
     const createNewEntry = useSelector(state => state.galleryCreate)
-    const {createLoading, createError, created} = createNewEntry
+    const {createError, newCut} = createNewEntry
 
     const deleteAnEntry = useSelector(state => state.galleryDelete)
-    const {deleteLoading, deleteError, deleted} = deleteAnEntry
+    const {deleteError, deletedCut} = deleteAnEntry
 
     useEffect(()=>{
         if(!userInfo || userInfo.length < 1 || !userInfo.isAdmin || error){
@@ -40,15 +44,39 @@ const ManageGalleryScreen = ({history}) => {
 
     const submitHandler = (e) => {
         console.log(caption, imageURL)
-        dispatch(galleryCreate(caption, imageURL))
-        window.location.reload()
 
+        if(imageURL.includes('images/cuts/')){
+            dispatch(galleryCreate(caption, imageURL))
+
+            if(newCut){
+                setMessage('')
+                setSuccess('Gallery Object Created')
+            }
+            else{
+                setSuccess('')
+                setMessage(createError)
+            }
+        }
+        else{
+            setMessage('Please Enter a Valid Image URL')
+            setSuccess('')
+        }
     }
 
     const DeleteEntry = (entry) => {
         console.log(entry)
         dispatch(galleryDelete(entry))
-        window.location.reload()
+        
+        if(deletedCut){
+            setMessage('')
+            setSuccess('')
+            setDeleteSuccess('Gallery Object Deleted')
+            dispatch(listGallery())
+        }
+        else{
+            setMessage(deleteError)
+            setDeleteSuccess('')
+        }
     }
 
     return (
@@ -57,6 +85,8 @@ const ManageGalleryScreen = ({history}) => {
                 <ReviewFormContainer>
                     <Form onSubmit={submitHandler} className='gallery-form'>
                         <h1 className='header-text'>CREATE A NEW GALLERY IMAGE</h1>
+                        {success && <ErrorMessage variant ='success'>{success}</ErrorMessage>}
+                        {message && <ErrorMessage variant='danger'>{message}</ErrorMessage> }
                         <Row className='gallery-form-row'>
                             <Col sm={6} md={6} lg={2}>
                                 <h4>Caption</h4>
@@ -94,11 +124,11 @@ const ManageGalleryScreen = ({history}) => {
                     </Form>
                 </ReviewFormContainer>
             </Container>
+
             <Container>
                 <h1 className='header-text'>ALL GALLERY IMAGES</h1>
-                {galleryLoading && <Loader />}
-                {galleryError && <ErrorMessage variant='danger'>{galleryError}</ErrorMessage>}
-
+                {loading && <Loader />}
+                {deleteSuccess && <ErrorMessage variant ='warning'>{deleteSuccess}</ErrorMessage>}
                 <Col sm={12} md={12} lg={12}>
                     <Table striped bordered hover responsive className='table-sm'>
                         <thead className='table-head'>

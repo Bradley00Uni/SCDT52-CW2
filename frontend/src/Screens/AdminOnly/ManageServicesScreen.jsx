@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col, FormControl, Container, Table } from 'react-bootstrap'
+import { Form, Button, Row, Col, FormControl, Container, Table, Collapse } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Loader from '../../Components/Loader'
@@ -17,10 +17,15 @@ const ManageServicesScreen = ({history}) => {
     const [duration, setDuration] = useState('')
     const [image, setImage] = useState('')
 
+    const [message, setMessage] = useState('')
+    const [success, setSuccess] = useState('')
+    const [deleteSuccess, setDeleteSuccess] = useState('')
+    const [formShow, setFormShow] = useState('')
+
     const dispatch = useDispatch()
 
     const userDetails = useSelector(state => state.userDetails)
-    const {loading, error, user} = userDetails
+    const {error} = userDetails
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
@@ -28,27 +33,63 @@ const ManageServicesScreen = ({history}) => {
     const {serviceLoading,serviceError, services} = serviceList
 
     const serviceFind = useSelector(state => state.serviceFind)
-    const {serviceFound} = serviceFind
+    const {findLoading, findError, serviceFound} = serviceFind
+
+    const serviceCreate = useSelector(state => state.createService)
+    const {createLoading, createError, service} = serviceCreate
 
     useEffect(()=>{
         if(!userInfo || userInfo.length < 1 || !userInfo.isAdmin || error){
             history.push('/')
             alert('Unauthorised Access');
         }
-
         dispatch(listServices())
+        setFormShow(true)
     },[dispatch, history])
 
     const submitHandler = (e) => {
-        console.log(haircut, price, duration, image)
-        dispatch(createService(haircut, price, duration, image))
-        window.location.reload()
+        e.preventDefault()
+
+        if(image.includes('images/cuts/')){
+            dispatch(createService(haircut, price, duration, image))
+
+            if(service.length > 1){
+                setMessage('')
+                setSuccess('Service Added')
+                setFormShow(false)
+            }
+            else{
+                setSuccess('')
+                setMessage('Invalid Data')
+            }
+        }
+        else{
+            setMessage('Please Enter a Valid Image URL')
+            setSuccess('')
+        }
     }
 
 
     const DeleteService = (service) => {
         dispatch(findService(service))
-        window.location.reload()
+
+        if(serviceFound){
+            setMessage('')
+            setSuccess('')
+            setDeleteSuccess('Service Deleted')
+            dispatch(listServices())
+        }
+        else{
+            if(findError){
+                setMessage(findError)
+            }
+            else{
+                setMessage('Delete Error - try again later')
+            }
+            setDeleteSuccess('')
+        }
+        
+
     }
 
     
@@ -56,6 +97,7 @@ const ManageServicesScreen = ({history}) => {
     return (
         <div>
             <Container>
+                {deleteSuccess && <ErrorMessage variant ='warning'>{deleteSuccess}</ErrorMessage>}
                 <h1 className='header-text'>ALL SERVICES</h1>
                 {serviceLoading && <Loader />}
                 {serviceError && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
@@ -89,8 +131,12 @@ const ManageServicesScreen = ({history}) => {
                 </Col>
             </Container>
 
+            {message && <ErrorMessage variant='danger'>{message}</ErrorMessage> }
+            
             <Container>
+            {success && <ErrorMessage variant ='success'>{success}</ErrorMessage>}
             <ReviewFormContainer>
+                <Collapse in={formShow}>
                 <Form onSubmit={submitHandler} className='service-form'>
                     <h1 className='header-text'>ADD A SERVICE</h1>
                     <Row className='service-form-row'>
@@ -150,6 +196,7 @@ const ManageServicesScreen = ({history}) => {
                         <Col md={1} lg={2}></Col>
                     </Row>
                 </Form>
+                </Collapse>
             </ReviewFormContainer>
             </Container>
         </div>

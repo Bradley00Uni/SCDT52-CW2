@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//RETURN ALL OBJECTS IN GALLERY
 export const listGallery = () => async (dispatch) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE
@@ -15,6 +16,7 @@ export const listGallery = () => async (dispatch) =>{
 }
 
 
+//ADMIN ONLY - CREATE NEW GALLERY OBJECT
 export const galleryCreate = (caption, imageURL) => async (dispatch, getState) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE
@@ -39,6 +41,7 @@ export const galleryCreate = (caption, imageURL) => async (dispatch, getState) =
 }
 
 
+//ADMIN ONLY - DELETE A GALLERY OBJECT
 export const galleryDelete = (image) => async (dispatch, getState) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE

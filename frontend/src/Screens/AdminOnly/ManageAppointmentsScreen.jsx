@@ -6,9 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../Components/Loader'
 import ErrorMessage from '../../Components/ErrorMessage'
 
-import { listAppointments, updateAppointment} from '../../actions/appointmentActions'
+import { listAppointments, confirmAppointment, completeAppointment, deleteAppointment} from '../../actions/appointmentActions'
 
 const ManageAppointmentsScreen = ({history}) => {
+
+    const [confirmMessage, setConfirmMessage] = useState('')
+    const [completeMessage, setCompleteMessage] = useState('')
+    const [deleteMessage, setDeleteMessage] = useState('')
 
     const dispatch = useDispatch()
 
@@ -21,8 +25,12 @@ const ManageAppointmentsScreen = ({history}) => {
     const appointmentList = useSelector(state => state.appointmentList)
     const {allLoading, allError, allAppointments} = appointmentList
 
-    const updateAppointments = useSelector(state => state.appointmentUpdate)
-    const {success} = updateAppointments
+    const confirmAppointments = useSelector(state => state.appointmentConfirm)
+    const {confirmSuccess} = confirmAppointments
+    const completeAppointments = useSelector(state => state.appointmentComplete)
+    const {completeSuccess} = completeAppointments
+    const deleteAppointments = useSelector(state => state.appointmentDelete)
+    const {deleteSuccess} = deleteAppointments
 
     useEffect(()=>{
         if(!userInfo || userInfo.length < 1 || !userInfo.isAdmin || error){
@@ -34,21 +42,24 @@ const ManageAppointmentsScreen = ({history}) => {
     },[dispatch, history])
 
     const ConfirmAppointment = (appointment) => {
-        const action = 'Confirm'
-        dispatch(updateAppointment(appointment._id, action))
-        window.location.reload()
+        dispatch(confirmAppointment(appointment._id))
+        setConfirmMessage('Appointment Confirmed - reload page to see changes')
+        setCompleteMessage('')
+        setDeleteMessage('')
     }
 
     const CompleteAppointment = (appointment) => {
-        const action = 'Complete'
-        dispatch(updateAppointment(appointment._id, action))
-        window.location.reload()
+        dispatch(completeAppointment(appointment._id))
+        setConfirmMessage('')
+        setCompleteMessage('Appointment Complete - reload page to see changes')
+        setDeleteMessage('')
     }
 
     const DeleteAppointment = (appointment) => {
-        const action = 'Delete'
-        dispatch(updateAppointment(appointment._id, action))
-        window.location.reload()
+        dispatch(deleteAppointment(appointment._id))
+        setConfirmMessage('')
+        setCompleteMessage('')
+        setDeleteMessage('Appointment Deleted - reload page to see changes')
     }
 
 
@@ -57,7 +68,10 @@ const ManageAppointmentsScreen = ({history}) => {
             <Container>
                 <h1 className='header-text'>ALL BOOKINGS</h1>
                 {allLoading && <Loader />}
-                {allError && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
+                {allError && <ErrorMessage variant='warning'>{error}</ErrorMessage>}
+                {confirmMessage && <ErrorMessage variant ='success'>{confirmMessage}</ErrorMessage>}
+                {completeMessage && <ErrorMessage variant ='info'>{completeMessage}</ErrorMessage>}
+                {deleteMessage && <ErrorMessage variant ='danger'>{deleteMessage}</ErrorMessage>}
 
                 <Col sm={12} md={12} lg={12}>
                 <Table striped bordered hover responsive className='table-sm'>

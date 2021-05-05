@@ -122,7 +122,8 @@
   margin-top: 3%;
   border: dashed white 2px;
   padding: 20px;
-}
+  background-color: #303030;
+} 
 
 .service-form, .gallery-form{
   margin-top: 3%;
@@ -145,6 +146,7 @@
   margin-right: 7px;
 }
 
+
 .service-form-row, .gallery-form-row, .password-form-row{
   margin-bottom: 2%;
 }
@@ -155,4 +157,8 @@
 .password-form-row-top{
   margin-bottom: 6%;
   margin-top: 6%;
+}
+
+#date-calendar{
+  height: 38px
 }

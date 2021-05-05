@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//RETURN ALL DAILY MESSAGES
 export const listMessages = () => async (dispatch) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE
@@ -37,7 +38,7 @@ export const createDailyMessage = (messageText) => async (dispatch, getState) =>
     }
 }
 
-
+//DELETE A DAILY MESSAGE - ADMIN ONLY 
 export const deleteDailyMessage = (dailyMessage) => async (dispatch, getState) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE

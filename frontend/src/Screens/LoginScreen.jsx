@@ -14,6 +14,8 @@ const LoginScreen = ({ location, history }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const [message, setMessage] = useState('')
+
     const dispatch = useDispatch()
 
     const userLogin = useSelector(state => state.userLogin)
@@ -23,7 +25,7 @@ const LoginScreen = ({ location, history }) => {
 
     useEffect(() => {
 
-        if(userInfo){
+        if(userInfo && userInfo._id){
             history.push('/')
         }
 
@@ -31,12 +33,15 @@ const LoginScreen = ({ location, history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault()
+
         dispatch(login(email,password))
     }
 
     return (
         <FormContainer>
             <h1 className='py-3'>Sign In!</h1>
+
+            {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
 
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='email'>
@@ -61,7 +66,6 @@ const LoginScreen = ({ location, history }) => {
                 <Button type='submit' variant='primary'>Sign In</Button>
                 
                 {loading && <Loader />}
-                {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
 
 
             </Form>

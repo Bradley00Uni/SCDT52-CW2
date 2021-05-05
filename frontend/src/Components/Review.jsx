@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Card } from 'react-bootstrap'
 import Star from './Star'
 
+//FORMATTING OF REVIEWS OUTPUTTED TO TESTIMONIAL PAGES
 const Review = ({review}) => {
 
     var blank = " "

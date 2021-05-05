@@ -62,11 +62,11 @@ export const allUsersReducer = (state = {users:[]}, action) =>{
 export const deleteUserReducer = (state = {deletedUser:{}}, action) =>{
     switch(action.type){
         case 'DELETED_USER_REQUEST':
-            return {loading:true, deletedUser:[]}
+            return {deleteLoading:true, deletedUser:[]}
         case 'DELETED_USER_SUCCESS':
-            return {loading:false, deletedUser: action.payload}
+            return {deleteLoading:false, deletedUser: action.payload}
         case 'DELETED_USER_FAIL':
-            return {loading: false, error: action.payload}
+            return {deleteLoading: false, deleteError: action.payload}
         default:
             return state
     } 
@@ -94,7 +94,7 @@ export const updatePasswordReducer = (state = {}, action) =>{
         case 'UPDATE_PASSWORD_SUCCESS':
             return {loading:false, success:true}
         case 'UPDATE_PASSWORD_FAIL':
-            return {loading: false, error: action.payload}
+            return {loading: false, passwordError: action.payload}
         default:
             return state
     } 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Card, ListGroup, ListGroupItem, CardGroup } from 'react-bootstrap'
 
+//OPENING TIMES DISPLAY FOR LANDING AND CONTACT PAGES
 const OpeningTimes = () => {
 
     return (

@@ -56,7 +56,7 @@ const LandingScreen = () => {
             <Row className="button-row">
                 <Col sm={1} md={3} lg={1} />
                 <Col sm={10} md={6} lg={5} className="align-items-center">
-                    <Link to='/'><Button variant='outline-success' size='lg' block>Book an Appointment</Button></Link>
+                    <Link to='/appointment'><Button variant='outline-success' size='lg' block>Book an Appointment</Button></Link>
                 </Col>
                 <Col sm={10} md={6} lg={5} className="align-items-center">
                     <Link to='/gallery'><Button variant='outline-success' size='lg' block>More of my Cuts</Button></Link>

@@ -14,11 +14,11 @@ export const serviceListReducer = (state = {services: []}, action) => {
 export const serviceFindReducer = (state = {serviceFound:{}}, action) => {
     switch(action.type){
         case 'SERVICE_FIND_REQUEST':
-            return {loading:true}
+            return {findLoading:true}
         case 'SERVICE_FIND_SUCCESS':
-            return {loading:false, serviceFound: action.payload}
+            return {findLoading:false, serviceFound: action.payload}
         case 'SERVICE_FIND_FAIL':
-            return {loading: false, error: action.payload}
+            return {findLoading: false, findError: action.payload}
         default:
             return state
     } 
@@ -27,11 +27,11 @@ export const serviceFindReducer = (state = {serviceFound:{}}, action) => {
 export const createServiceReducer = (state = {service: {}}, action) => {
     switch(action.type){
         case 'SERVICE_CREATE_REQUEST':
-            return {loading:true, service: {}}
+            return {createLoading:true, service: {}}
         case 'SERVICE_CREATE_SUCCESS':
-            return {loading:false, service: action.payload}
+            return {createLoading:false, service: action.payload}
         case 'SERVICE_CREATE_FAIL':
-            return {loading: false, error: action.payload}
+            return {createLoading: false, createError: action.payload}
         default:
             return state
     }

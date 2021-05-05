@@ -4,6 +4,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/UserModel')
 
+//Function used to validate web token of users - check if valid login is present
 const protect = async(req, res, next)=>{
     let token = req.headers.authorization
 
@@ -26,7 +27,7 @@ const protect = async(req, res, next)=>{
    }
 }
 
-
+//Function to confirm user is Admin
 const adminCheck = (req, res, next)=>{
 
     if (req.user && req.user.isAdmin){

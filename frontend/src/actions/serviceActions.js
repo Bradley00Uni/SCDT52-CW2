@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//RETURN ALL SERVICES
 export const listServices = () => async (dispatch) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE
@@ -14,6 +15,7 @@ export const listServices = () => async (dispatch) =>{
     }
 }
 
+//FIND SPECIFIC SERVICE
 export const findService = (service) => async (dispatch, getState) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE

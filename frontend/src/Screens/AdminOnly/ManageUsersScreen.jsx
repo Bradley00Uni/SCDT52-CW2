@@ -13,23 +13,25 @@ const ManageUsersScreen = ({history}) => {
 
     const dispatch = useDispatch()
 
+    const [message, setMessage] = useState('')
+    const [success, setSuccess] = useState('')
+
     const userDetails = useSelector(state => state.userDetails)
-    const {loading, error, user} = userDetails
+    const {error} = userDetails
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
     const listAllUsers = useSelector(state => state.allUsers)
     const {usersLoading, usersError, users} = listAllUsers
     
-    const deletedUser = useSelector(state => state.deleteAUser)
-    const {accountDelete} = deletedUser
+    const deleteAUser = useSelector(state => state.deleteAUser)
+    const {deleteError, deletedUser} = deleteAUser
 
     useEffect(()=>{
         if(!userInfo || userInfo.length < 1 || !userInfo.isAdmin || error){
             history.push('/')
             alert('Unauthorised Access');
         }
-
         dispatch(allUsers())
     }, [dispatch])
 
@@ -43,13 +45,30 @@ const ManageUsersScreen = ({history}) => {
 
     const DeleteUser = (user) => {
         dispatch(deleteUser(user))
-        window.location.reload()
+        if(deletedUser || deletedUser.length > 1){
+            setSuccess('User Deleted')
+            setMessage('')
+            dispatch(allUsers())
+        }
+        else{
+            setSuccess('')
+            if(deleteError){
+                setMessage(deleteError)
+            }
+            else{
+                setMessage('Deletion Error - Try again later')
+            }
+        }
     }
     
     return (
         <div>
             <Container>
                 <h1 className='header-text'>USER MANAGEMENT</h1>
+
+                {success && <ErrorMessage variant ='success'>{success}</ErrorMessage>}
+                {message && <ErrorMessage variant='danger'>{message}</ErrorMessage> }
+                
                 {usersLoading && <Loader />}
                 {usersError && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
 

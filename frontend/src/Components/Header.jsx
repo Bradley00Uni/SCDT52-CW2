@@ -43,6 +43,7 @@ const Header = ({match, history}) => {
     }, [dispatch])
 
 
+    //HEADER CONTAINING NAVBAR AND WEBSITE BANNER SHOWN ON ALL PAGES
     return (
         <>
         <Row className="col-md-12">

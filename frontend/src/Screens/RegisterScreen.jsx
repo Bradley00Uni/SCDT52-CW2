@@ -8,6 +8,7 @@ import {register, logout} from '../actions/userActions'
 
 import Loader from '../Components/Loader'
 import ErrorMessage from '../Components/ErrorMessage'
+import id from 'date-fns/esm/locale/id/index.js'
 const RegisterScreen = ({history}) => {
 
     const [name, setName] = useState('')
@@ -26,6 +27,7 @@ const RegisterScreen = ({history}) => {
         if(userInfo){
             history.push('/')
         }
+
     }, [history, userInfo])
 
     const submitHandler = (e) => {
@@ -34,8 +36,30 @@ const RegisterScreen = ({history}) => {
             setMessage('Passwords Do not Match!')
         }
         else{
-            dispatch(register(name, email, pNumber, password))
-            
+            if(emailCheck(email) == true){
+                setMessage('Invalid Email')
+            }
+            else if(pNumber.length < 11){
+                setMessage('Invalid Mobile Number')
+            }
+            else{
+                dispatch(register(name, email, pNumber, password))
+            }
+        }
+    }
+
+    const emailCheck = (email) => {
+        const format = ['( )',',',':',';','<','>','[',']','{','}','?','!']
+        if(email.length < 1){
+            return true
+        }
+        else{
+            for(var i = 0; i < format.length; i++){
+                if(email.includes(format[i])){
+                    return true
+                }
+            }
+            return false
         }
     }
 
@@ -45,7 +69,7 @@ const RegisterScreen = ({history}) => {
                 <h1 className='py-3'>Sign Up!</h1>
                 {error && <ErrorMessage variant='danger'>{error}</ErrorMessage> }
                 {loading && <Loader />}
-                {message && <ErrorMessage variant ='info'>{message}</ErrorMessage>}
+                {message && <ErrorMessage variant ='warning'>{message}</ErrorMessage>}
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='name'>
                         <Form.Label>Name</Form.Label>
@@ -69,6 +93,7 @@ const RegisterScreen = ({history}) => {
                         <Form.Label>Phone Number</Form.Label>
                         <FormControl
                             type='phone'
+                            maxLength='11'
                             placeholder='Enter contact number...'
                             value={pNumber}
                             onChange={(e)=>setPNumber(e.target.value)}

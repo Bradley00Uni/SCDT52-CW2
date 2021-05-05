@@ -149,7 +149,7 @@ export const deleteUser = (account) => async(dispatch, getState) => {
 }
 
 
-//USER-UPDATED 
+//USER-UPDATED DETAILS
 export const updateUser = (currentUser, email, phone) => async (dispatch, getState) =>{
     try{
         dispatch({type: 'UPDATE_USER_REQUEST'})
@@ -172,7 +172,7 @@ export const updateUser = (currentUser, email, phone) => async (dispatch, getSta
     }
 }
 
-
+//UPDATE USER'S PASSWORD
 export const updatePassword = (currentUser, currentPassword, newPassword) => async (dispatch, getState) =>{
     try{
         dispatch({type: 'UPDATE_PASSWORD_REQUEST'})

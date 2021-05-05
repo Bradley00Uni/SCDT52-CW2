@@ -9,17 +9,19 @@ import Loader from '../Components/Loader'
 import ErrorMessage from '../Components/ErrorMessage'
 import ReviewFormContainer from '../Components/ReviewFormContainer'
 
-const PasswordEditScreen = () => {
+const PasswordEditScreen = ({history}) => {
 
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+
     const [message, setMessage] = useState(null)
+    const [errorMessage, setErrorMessage] = useState(null)
 
     const dispatch = useDispatch()
 
     const userDetails = useSelector(state => state.userDetails)
-    const {loading, error, user} = userDetails
+    const {loading, userError, user} = userDetails
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
@@ -33,9 +35,20 @@ const PasswordEditScreen = () => {
         if(newPassword !== confirmPassword){
             setMessage('Passwords Do not Match!')
         }
+        else if(newPassword == currentPassword){
+            setMessage('Password could not be Updated - Cannot update to current Password')
+        }
         else{
             dispatch(updatePassword(currentUser, currentPassword, newPassword))
-            alert('password changed')
+            if(passwordError){
+                setMessage('Password could not be Updated')
+            }
+            else{
+                history.push('/')
+                alert('Password Updated')
+                setMessage('')
+                dispatch(logout())
+            }
         }
     }
 
@@ -45,7 +58,6 @@ const PasswordEditScreen = () => {
                 <ReviewFormContainer>
                     <Form onSubmit={submitHandler} className='passwordChange-form'>
                         <h1 className='header-text'>Update your Password</h1>
-                        {passwordError && <ErrorMessage variant='danger'>{error}</ErrorMessage> }
                         {passwordLoading && <Loader />}
                         {message && <ErrorMessage variant ='warning'>{message}</ErrorMessage>}
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Col, Row, Card, Tabs, Tab, ListGroup, ListGroupItem, CardGroup, Nav } from 'react-bootstrap'
 
+//DISPLAY CONTACT INFORMATION OF KAYE
 const ContactInformation = () => {
 
     return (

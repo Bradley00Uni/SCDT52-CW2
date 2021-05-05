@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
+//GENERIC FORM FORMATTING - USED FOR LOGIN PAGES
 const formContainer = ({ children }) => {
     return (
         <Container>

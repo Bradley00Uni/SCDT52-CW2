@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import FormContainer from '../Components/FormContainer'
+import AppointmentFormContainer from '../Components/AppointmentFormContainer'
 import { Form, Button, Row, Col, FormControl, Container, Table, Collapse, ProgressBar } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import DatePicker from "react-datepicker"
@@ -25,8 +25,12 @@ const AppointmentScreen = ({history}) => {
 
     const [calendarDate, setCalendarDate] = useState('')
 
+    const [message, setMessage] = useState('')
+    const [success, setSuccess] = useState('')
+
     const [dateOpen, setDateOpen] = useState(false)
     const [timeOpen, setTimeOpen] = useState(false)
+    const [formShow, setFormShow] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -42,6 +46,9 @@ const AppointmentScreen = ({history}) => {
     const serviceFind = useSelector(state => state.serviceFind)
     const {serviceFound} = serviceFind
 
+    const createdAppointment = useSelector(state => state.createAppointment)
+    const {createLoading, createError, appointment} = createdAppointment
+
     useEffect(()=>{
 
         dispatch(listServices())
@@ -49,12 +56,31 @@ const AppointmentScreen = ({history}) => {
             history.push('/') 
             alert('Please Login or Register to book an Appointment');
         }
+        setFormShow(true)
     },[history, userInfo])
 
     const submitHandler = (e) => {
         e.preventDefault()
         console.log(service, date, time, note)
-        dispatch(createAppointment(service, date, time, note))
+
+        if(!service || service.length < 1){
+            setMessage('No Service Selected')
+        }
+        else if(!date || date.length < 1){
+            setMessage('No Date Selected')
+        }
+        else if(!time || time.length < 1){
+            setMessage('No Time Selected')
+        }
+        else{
+            dispatch(createAppointment(service, date, time, note))
+
+            if(appointment){
+                closeForm()
+                setMessage('')
+                setSuccess('Appointment Successfully Booked!')
+            }
+        }
     }
 
     const minmiseForm = () => {
@@ -63,6 +89,10 @@ const AppointmentScreen = ({history}) => {
         if(timeOpen){
             setTimeOpen(!timeOpen)
         }
+    }
+
+    const closeForm = () => {
+        setFormShow(false)
     }
 
     const getTimes = () => {
@@ -139,13 +169,28 @@ const AppointmentScreen = ({history}) => {
         <div>
             <h1 className='text-center header-text'>Book Appointment</h1>
 
-            <FormContainer>
-                <Form onSubmit={submitHandler} className='appointment-form'>              
+            {createError && <ErrorMessage variant='danger'>{createError}</ErrorMessage> }
+            {createLoading && <Loader />}
+            {success && <ErrorMessage variant ='success'>{success}</ErrorMessage>}
+
+            <AppointmentFormContainer>
+            <Collapse in={formShow}>
+                <Form onSubmit={submitHandler} className='appointment-form'>      
+                {message && <ErrorMessage variant ='danger'>{message}</ErrorMessage>}
                     <Row>
-                        <Col sm={12} md={4} lg={4}>
+                        <Col sm={4} md={4} lg={4}>
                             <h4>Pick a Service</h4>
                         </Col>
-                        <Col sm={12} md={8} lg={8}>
+                        <Col sm={4} md={4} lg={4}>
+                            <Collapse in={dateOpen}><h4>Set the Date</h4></Collapse>
+                        </Col> 
+                        <Col sm={4} md={4} lg={4}>
+                            <Collapse in={timeOpen}><h4>Open Slots</h4></Collapse>
+                        </Col> 
+                    </Row>
+
+                    <Row>
+                        <Col sm={4} md={4} lg={4}>
                             <Form.Group controlId='service'>                
                                 <FormControl
                                 as='select'
@@ -158,25 +203,9 @@ const AppointmentScreen = ({history}) => {
                                  ))}    
                                 </FormControl>    
                             </Form.Group>
-                        </Col>          
-                    </Row>
-                    <Row>
-                        <Col sm={12} md={12} lg={12}>
-                            <Button
-                            onClick={() => minmiseForm()}
-                            aria-controls="example-collapse-text"
-                            aria-expanded={dateOpen}
-                            className='btn btn-block rounded btn-info'
-                            >Set Service
-                            </Button>
                         </Col>
-                    </Row>
-                  
-                    <Row  className='form-divide'> 
-                        <Col sm={12} md={4} lg={4}>
-                            <Collapse in={dateOpen}><h4>Set the Date</h4></Collapse>
-                        </Col>               
-                        <Col sm={12} md={8} lg={8}>
+
+                        <Col sm={4} md={4} lg={4}>
                             <Collapse in={dateOpen}>
                                 <Form.Group controlId='date'>
                                     <DatePicker
@@ -190,26 +219,8 @@ const AppointmentScreen = ({history}) => {
                                 </Form.Group>
                             </Collapse>
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col sm={12} md={12} lg={12}>
-                            <Collapse in={dateOpen}>
-                                <Button
-                                onClick={() => getTimes()}
-                                aria-controls="example-collapse-text"
-                                aria-expanded={dateOpen}
-                                className='btn btn-block rounded btn-info'
-                                >Set Date
-                                </Button>
-                            </Collapse>
-                        </Col>
-                    </Row>
-                                      
-                    <Row  className='form-divide'>
-                        <Col sm={12} md={4} lg={4}>
-                            <Collapse in={timeOpen}><h4>Open Slots</h4></Collapse>
-                        </Col>       
-                        <Col sm={12} md={8} lg={8}>
+
+                        <Col sm={4} md={4} lg={4}>
                             <Collapse in={timeOpen}>
                             {loading ? (<Loader />) : error ? (<ErrorMessage variant="danger">{error}</ErrorMessage>) : (
                                 <Form.Group controlId='time'>
@@ -232,45 +243,72 @@ const AppointmentScreen = ({history}) => {
                             </Collapse>
                         </Col>
                     </Row>
+
                     <Row>
-                        <Col sm={12} md={12} lg={12}>
+                        <Col sm={4} md={4} lg={4}>
+                            <Button
+                            onClick={() => minmiseForm()}
+                            aria-controls="example-collapse-text"
+                            aria-expanded={dateOpen}
+                            className='btn btn-block rounded'
+                            variant='outline-info'
+                            >Set Service
+                            </Button>
+                        </Col>
+
+                        <Col sm={4} md={4} lg={4}>
+                            <Collapse in={dateOpen}>
+                                <Button
+                                onClick={() => getTimes()}
+                                aria-controls="example-collapse-text"
+                                aria-expanded={dateOpen}
+                                className='btn btn-block rounded'
+                                variant='outline-info'
+                                >Set Date
+                                </Button>
+                            </Collapse>
+                        </Col>
+
+                        <Col sm={4} md={4} lg={4}>
                             <Collapse in={timeOpen}>
                                 <Button
                                 aria-controls="example-collapse-text"
-                                className='btn btn-block rounded btn-info'
+                                className='btn btn-block rounded'
+                                variant='outline-info'
                                 >Set Time
                                 </Button>
                             </Collapse>
                         </Col>
                     </Row>
 
+
                     <Row className='form-note-divide'>
-                        <Col sm={12} md={12} lg={12}>
+                        <Col sm={12} md={8} lg={8}>
                             <h4>Leave a Note?</h4>
                         </Col>
-                        <Col sm={12} md={12} lg={12}>
+                        <Col sm={12} md={8} lg={8}>
                             <Form.Control 
                             as="textarea" 
                             placeholder='Leave a small note if there is anything else you may want to express (100 Character Max)' 
-                            rows={3}
+                            rows={2}
                             maxLength='100'
                             onChange={(e)=>setNote(e.target.value)} 
                             />
                         </Col>
-                    </Row>                        
 
-                    <Row>
-                        <Col sm={12} md={12} lg={12}>
+                        <Col sm={12} md={4} lg={4}>
                                 <Button
                                 onClick={submitHandler}
-                                className='btn btn-block rounded btn-success form-divide'
+                                size='lg'
+                                className='btn btn-block rounded btn-success'
                                 >Book Appointment
                                 </Button>   
                         </Col>
-                    </Row>
+                    </Row>                        
 
                 </Form>
-            </FormContainer>
+            </Collapse>
+            </AppointmentFormContainer>
 
             <Row>
                 <hr class="section-divide col-md-12" id="first-divide"/>

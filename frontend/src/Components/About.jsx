@@ -9,6 +9,7 @@ import {
 
 import MessagePicture from './MessagePicture'
 
+//COMPONENT USED TO DISPLAY 'ABOUT' SECTION ON LANDING PAGE
 const About = () => {
 
     return(

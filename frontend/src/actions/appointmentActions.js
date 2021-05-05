@@ -74,29 +74,6 @@ export const createAppointment = (serviceId, appointmentDate, appointmentTime, n
 }
 
 
-//ADMIN-UPDATED APPOINTMENT
-export const updateAppointment = (passed, action) => async (dispatch, getState) =>{
-    try{
-        dispatch({type: 'UPDATE_APPOINTMENT_REQUEST'})
-
-        const {userLogin:{userInfo}} = getState()
-
-        const config = {
-            headers:{
-                Authorization: userInfo.token
-            }
-        }
-
-        //PUT API DATA
-        const {data} = await axios.put(`/api/appointments/${passed}`,{passed, action} ,config)
-
-        dispatch({type: 'UPDATE_APPOINTMENT_SUCCESS', payload: data})
-    }
-    catch(error){
-        dispatch({type: 'UPDATE_APPOINTMENT_FAIL', payload: error.message})
-    }
-}
-
 //APPOINTMENTS BY DAY
 export const appointmentByDay = (date) => async (dispatch, getState) =>{
     try{
@@ -117,5 +94,77 @@ export const appointmentByDay = (date) => async (dispatch, getState) =>{
     }
     catch(error){
         dispatch({type: 'APPOINTMENT_DAY_LIST_FAIL', payload: error.message})
+    }
+}
+
+
+//ADMIN-CONFIRMED APPOINTMENT
+export const confirmAppointment = (passed) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: 'CONFIRM_APPOINTMENT_REQUEST'})
+
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers:{
+                Authorization: userInfo.token
+            }
+        }
+
+        //PUT API DATA
+        const {data} = await axios.put(`/api/appointments/${passed}/confirm`,{passed} ,config)
+
+        dispatch({type: 'CONFIRM_APPOINTMENT_SUCCESS', payload: data})
+    }
+    catch(error){
+        dispatch({type: 'CONFIRM_APPOINTMENT_FAIL', payload: error.message})
+    }
+}
+
+
+//ADMIN-COMPLETED APPOINTMENT
+export const completeAppointment = (passed) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: 'COMPLETE_APPOINTMENT_REQUEST'})
+
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers:{
+                Authorization: userInfo.token
+            }
+        }
+
+        //PUT API DATA
+        const {data} = await axios.put(`/api/appointments/${passed}/complete`,{passed} ,config)
+
+        dispatch({type: 'COMPLETE_APPOINTMENT_SUCCESS', payload: data})
+    }
+    catch(error){
+        dispatch({type: 'COMPLETE_APPOINTMENT_FAIL', payload: error.message})
+    }
+}
+
+
+//ADMIN-DELETED APPOINTMENT
+export const deleteAppointment = (passed) => async (dispatch, getState) =>{
+    try{
+        dispatch({type: 'DELETE_APPOINTMENT_REQUEST'})
+
+        const {userLogin:{userInfo}} = getState()
+
+        const config = {
+            headers:{
+                Authorization: userInfo.token
+            }
+        }
+
+        //PUT API DATA
+        const {data} = await axios.put(`/api/appointments/${passed}/delete`,{passed} ,config)
+
+        dispatch({type: 'DELETE_APPOINTMENT_SUCCESS', payload: data})
+    }
+    catch(error){
+        dispatch({type: 'DELETE_APPOINTMENT_FAIL', payload: error.message})
     }
 }

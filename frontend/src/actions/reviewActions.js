@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//RETURN ALL REVIEWS
 export const listReviews = () => async (dispatch) =>{
     try{
         //EXECUTES REDUCERS TO UPDATE STATE

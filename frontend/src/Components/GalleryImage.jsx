@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Card } from 'react-bootstrap'
 
+//FORMATTING FOR GALLERY OBJECTS
 const GalleryImage = ({exampleCut}) => {
 
     if(exampleCut.uploadDate){

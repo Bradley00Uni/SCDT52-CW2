@@ -6,7 +6,7 @@ import { userLoginReducer, userDetailsReducer, userRegisterReducer, allUsersRedu
 import { createDailyMessageReducer, dailyMessagesReducer, deleteDailyMessageReducer } from './reducers/dailyMessageReducers'
 import { createServiceReducer, serviceFindReducer, serviceListReducer } from './reducers/serviceReducers'
 import { createReviewReducer, reviewListReducer } from './reducers/reviewReducers'
-import { appointmentByDayReducer, appointmentListReducer, appointmentUpdateReducer, createAppointmentReducer, myAppointmentReducer } from './reducers/appointmentReducers'
+import { appointmentByDayReducer, appointmentCompleteReducer, appointmentConfirmReducer, appointmentDeleteReducer, appointmentListReducer, createAppointmentReducer, myAppointmentReducer } from './reducers/appointmentReducers'
 
 //USE REDUCERS
 const reducer = combineReducers({
@@ -34,7 +34,9 @@ const reducer = combineReducers({
     //ADMIN-ONLY REDUCERS
     //Appointments
     appointmentByDay:appointmentByDayReducer,
-    appointmentUpdate:appointmentUpdateReducer,
+    appointmentConfirm:appointmentConfirmReducer,
+    appointmentComplete:appointmentCompleteReducer,
+    appointmentDelete:appointmentDeleteReducer,
 
     //Reviews
     createReview:createReviewReducer,

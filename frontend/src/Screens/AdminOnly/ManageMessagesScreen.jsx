@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col, FormControl, Container, Table } from 'react-bootstrap'
+import { Form, Button, Row, Col, FormControl, Container, Table, Collapse } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {listMessages, createDailyMessage, deleteDailyMessage} from '../../actions/dailyMessageActions'
@@ -13,10 +13,15 @@ const ManageMessagesScreen = ({history}) => {
 
     const [newDailyMessage, setNewDailyMessage] = useState('')
 
+    const [message, setMessage] = useState('')
+    const [success, setSuccess] = useState('')
+    const [deleteSuccess, setDeleteSuccess] = useState('')
+    const [formShow, setFormShow] = useState('')
+
     const dispatch = useDispatch()
 
     const userDetails = useSelector(state => state.userDetails)
-    const {loading, error, user} = userDetails
+    const {error} = userDetails
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
@@ -26,34 +31,57 @@ const ManageMessagesScreen = ({history}) => {
     const deleteMessage= useSelector(state => state.deleteDailyMessage)
     const {foundMessage} = deleteMessage
 
+    const createMessage  =useSelector(state => state.createDailyMessage)
+    const {createLoading, createError, dailyMessage} = createMessage
+
     useEffect(()=>{
         if(!userInfo || userInfo.length < 1 || !userInfo.isAdmin || error){
             history.push('/')
-            alert('Unauthorised Access');
+            alert('Unauthorised Access')
         }
-
         dispatch(listMessages())
+        setFormShow(true)
     },[dispatch, history])
 
     const submitHandler = (e) => {
         console.log(newDailyMessage)
         dispatch(createDailyMessage(newDailyMessage))
-        window.location.reload()
+        
+        if(dailyMessage){
+            setMessage('')
+            setSuccess('Daily Message Created')
+            dispatch(listMessages())
+            setFormShow(false)
+        }
     }
 
     const DeleteDailyMessage = (message) => {
         console.log(message)
         dispatch(deleteDailyMessage(message))
-        window.location.reload()
+
+        if(foundMessage){
+            setMessage('')
+            setSuccess('')
+            setDeleteSuccess('Message Deleted')
+            dispatch(listMessages())
+        }
+        else{
+            setMessage(createError)
+        }
+        
     }
 
 
     return (
         <div>
             <Container>
-                   <ReviewFormContainer>
+                <ReviewFormContainer>
+                {success && <ErrorMessage variant ='success'>{success}</ErrorMessage>}
+                    <Collapse in={formShow}>
                        <Form onSubmit={submitHandler} className='message-form'>
                         <h1 className='header-text'>SET A NEW MESSAGE</h1>
+                        {message && <ErrorMessage variant='danger'>{message}</ErrorMessage> }
+                        {createLoading && <Loader />}
                         <Row>
                             <Col sm={12} md={12} lg={12}>
                                 <FormControl
@@ -76,14 +104,14 @@ const ManageMessagesScreen = ({history}) => {
                             </Col>   
                         </Row>
                        </Form>
-                   </ReviewFormContainer>
+                    </Collapse>
+                </ReviewFormContainer>
             </Container>
-
             <Container>
                 <h1 className='header-text'>ALL DAILY MESSAGES</h1>
                 {messageLoading && <Loader />}
                 {messageError && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
-
+                {deleteSuccess && <ErrorMessage variant ='warning'>{deleteSuccess}</ErrorMessage>}
                 <Col sm={12} md={12} lg={12}>
                     <p><i>The latest Daily Message will always be displayed, if you want no message at all - make sure this table is empty!</i></p>
                     <Table striped bordered hover responsie className='table-sm'>

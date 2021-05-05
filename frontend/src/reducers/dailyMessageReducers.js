@@ -14,11 +14,11 @@ export const dailyMessagesReducer = (state = {dailyMessages: []}, action) => {
 export const createDailyMessageReducer = (state = {dailyMessage: {}}, action) => {
     switch(action.type){
         case 'DAILY_MESSAGE_CREATE_REQUEST':
-            return {loading:true, dailyMessage: {}}
+            return {messageLoading:true, dailyMessage: {}}
         case 'DAILY_MESSAGE_CREATE_SUCCESS':
-            return {loading:false, dailyMessage: action.payload}
+            return {messageLoading:false, dailyMessage: action.payload}
         case 'DAILY_MESSAGE_CREATE_FAIL':
-            return {loading: false, error: action.payload}
+            return {messageLoading: false, messageError: action.payload}
         default:
             return state
     }
@@ -27,11 +27,11 @@ export const createDailyMessageReducer = (state = {dailyMessage: {}}, action) =>
 export const deleteDailyMessageReducer = (state = {foundMessage: {}}, action) => {
     switch(action.type){
         case 'DAILY_MESSAGE_DELETE_REQUEST':
-            return {loading:true}
+            return {deleteLoading:true}
         case 'DAILY_MESSAGE_DELETE_SUCCESS':
-            return {loading:false, foundMessage: action.payload}
+            return {deleteLoading:false, foundMessage: action.payload}
         case 'DAILY_MESSAGE_DELETE_FAIL':
-            return {loading: false, error: action.payload}
+            return {deleteLoading: false, deleteError: action.payload}
         default:
             return state
     }

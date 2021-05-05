@@ -159,43 +159,51 @@ app.get('/api/appointments/myappointments', protect, async(req, res)=>{
 })
 
 //Update Booking (Admin-only)
-app.put('/api/appointments/:id', protect, adminCheck, async(req, res)=>{
-    console.log('Update Booking')
+//'Confirm' Status
+app.put('/api/appointments/:id/confirm', protect, adminCheck, async(req, res)=>{
+    const {passed} = req.body
 
-   const {passed, action} = req.body
-    const appointment = await Appointment.findOne({_id: passed})
+    const appointment = await Appointment.findOne({_id: passed}) 
+    appointment.isConfirmed = true
+    const updated = await appointment.save()
 
-    if(action == 'Confirm'){
-        if(appointment){
-            appointment.isConfirmed = true
-            const updatedApointment = await appointment.save()
-        }
-        else{
-            res.status(404).json({message: 'Booking not Found'})
-            throw new Error('Booking not Found')
-        }
+    if(updated){
+        res.json('Appointment Updated')
     }
-    else if(action == 'Complete'){
-        if(appointment){
-            appointment.isComplete = true
-            const updatedApointment = await appointment.save()
-        }
-        else{
-            res.status(404).json({message: 'Booking not Found'})
-            throw new Error('Booking not Found')
-        }
+    else{
+        throw new Error('Update Failed')
     }
-    else if(action == 'Delete'){
-        if(appointment){
-            await Appointment.deleteOne(appointment)
-        }
-        else{
-            res.status(404).json({message: 'Booking not Found'})
-            throw new Error('Booking not Found')
-        }
-    }
+})
 
-    
+//'Complete' Status
+app.put('/api/appointments/:id/complete', protect, adminCheck, async(req, res)=>{
+    const {passed} = req.body
+
+    const appointment = await Appointment.findOne({_id: passed}) 
+    appointment.isComplete = true
+    const updated = await appointment.save()
+
+    if(updated){
+        res.json('Appointment Updated')
+    }
+    else{
+        throw new Error('Update Failed')
+    }
+})
+
+//Delete Appointment
+app.put('/api/appointments/:id/delete', protect, adminCheck, async(req, res)=>{
+    const {passed} = req.body
+
+    const appointment = await Appointment.findOne({_id: passed}) 
+    const updated = await Appointment.deleteOne(appointment)
+
+    if(updated){
+        res.json('Appointment Deleted')
+    }
+    else{
+        throw new Error('Update Failed')
+    }
 })
 
 
@@ -237,6 +245,8 @@ app.get('/api/reviews', async (req, res)=>{
     res.json(reviews)
 })
 
+
+//Leave Review
 app.post('/api/reviews', protect, async(req, res)=>{
     console.log('review request')
 
@@ -249,13 +259,19 @@ app.post('/api/reviews', protect, async(req, res)=>{
     }
     
     if(anon){
-        const review = await Review.create({
-            user: anonymousUser,
-            client: anonymousUser.name,
-            title,
-            body,
-            rating
-        })
+
+        if(rating > 5){
+            //Do Nothing
+        }
+        else{
+            const review = await Review.create({
+                user: anonymousUser,
+                client: anonymousUser.name,
+                title,
+                body,
+                rating
+            })
+        }
 
         if(review){
             res.status(201).json({
@@ -303,8 +319,8 @@ app.get('/api/services', async (req, res)=>{
     res.json(services)
 })
 
+//Create a Service
 app.post('/api/services', protect, adminCheck, async(req, res)=>{
-    console.log('Service Creation')
 
     const {haircut, price, duration, image} = req.body
 
@@ -315,13 +331,17 @@ app.post('/api/services', protect, adminCheck, async(req, res)=>{
         imageURL: image
     })
 
-    if(!service){
+    if(service){
+        res.json('Create Success')
+    }
+    else{
         res.status(400).json({message: 'Service error - Incorrect Data'})
         throw new Error('Invalid Data')
     }
 
 })
 
+//Delete a Service
 app.post('/api/services/:id', protect, adminCheck, async (req, res)=>{
 
     const {service} = req.body
@@ -353,7 +373,7 @@ app.post('/api/users/login', async(req, res)=>{
         })
     }
     else{
-        res.json({message: "Invalid Login"})
+        res.status(401).json({message: 'Invalid Credentials'})
         throw new Error('Invalid Credentials')
     }
 })
@@ -394,6 +414,7 @@ app.post('/api/users', async(req, res) =>{
 
 })
 
+//Return user Profile
 app.get('/api/users/profile', protect, async(req, res) =>{
 
     const user = await User.findById(req.user.id)
@@ -426,7 +447,7 @@ app.put('/api/users/:profile/contact', protect, async(req, res)=>{
         userFind.phone = phone
 
         const update = await userFind.save()
-        res.json('Contact Details Selected')
+        res.json('Contact Details Updated')
     }
     else{
         res.status(404).json({message: 'Details could not be updated'})
@@ -444,7 +465,7 @@ app.put('/api/users/:profile/password', protect, async(req, res)=>{
         userFind.password = newPassword
        
         const update = await userFind.save()
-        res.json('Contact Details Selected')
+        res.json('Contact Details Updated')
     }
     else{
         res.status(404).json({message: 'Details could not be updated'})

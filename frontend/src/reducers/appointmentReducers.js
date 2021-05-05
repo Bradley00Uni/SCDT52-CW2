@@ -54,15 +54,47 @@ export const appointmentByDayReducer = (state = {dayAppointments: []}, action) =
 }
 
 
-export const appointmentUpdateReducer = (state = {}, action) => {
+export const appointmentConfirmReducer = (state = {}, action) => {
     switch(action.type){
-        case 'UPDATE_APPOINTMENT_REQUEST':
+        case 'CONFIRM_APPOINTMENT_REQUEST':
             return {loading:true}
-        case 'UPDATE_APPOINTMENT_SUCCESS':
+        case 'CONFIRM_APPOINTMENT_SUCCESS':
             return {loading:false, success:true}
-        case 'UPDATE_APPOINTMENT_FAIL':
+        case 'CONFIRM_APPOINTMENT_FAIL':
             return {loading: false, error: action.payload}
-        case 'UPDATE_APPOINTMENT_RESET':
+        case 'CONFIRM_APPOINTMENT_RESET':
+            return {}
+        default:
+            return state
+    } 
+}
+
+
+export const appointmentCompleteReducer = (state = {}, action) => {
+    switch(action.type){
+        case 'COMPLETE_APPOINTMENT_REQUEST':
+            return {loading:true}
+        case 'COMPLETE_APPOINTMENT_SUCCESS':
+            return {loading:false, success:true}
+        case 'COMPLETE_APPOINTMENT_FAIL':
+            return {loading: false, error: action.payload}
+        case 'COMPLETE_APPOINTMENT_RESET':
+            return {}
+        default:
+            return state
+    } 
+}
+
+
+export const appointmentDeleteReducer = (state = {}, action) => {
+    switch(action.type){
+        case 'DELETE_APPOINTMENT_REQUEST':
+            return {loading:true}
+        case 'DELETE_APPOINTMENT_SUCCESS':
+            return {loading:false, success:true}
+        case 'DELETE_APPOINTMENT_FAIL':
+            return {loading: false, error: action.payload}
+        case 'DELETE_APPOINTMENT_RESET':
             return {}
         default:
             return state

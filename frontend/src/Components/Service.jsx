@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Card } from 'react-bootstrap'
 
+//FORMATTING FOR SERVICE DISPLAY ON LANDING AND APPOINTMENT PAGES
 const Service = ({service}) => {
 
     return (
