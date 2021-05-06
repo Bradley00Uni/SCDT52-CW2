@@ -55,6 +55,10 @@ const AccountEditScreen = ({history}) => {
             dispatch(updateUser(currentUser, email, phone))
         }
 
+        if(success){
+            setMessage('Update Successful - please re-login to see changes')
+        }
+
     }
     
     return (
@@ -65,7 +69,7 @@ const AccountEditScreen = ({history}) => {
                         <h1 className='header-text'>Update your Contact Information</h1>
                         {updateError && <ErrorMessage variant='danger'>{error}</ErrorMessage> }
                         {updateLoading && <Loader />}
-                        {message && <ErrorMessage variant ='warning'>{message}</ErrorMessage>}
+                        {message && <ErrorMessage variant ='success'>{message}</ErrorMessage>}
 
                         <Row className='service-form-row'>
                             <Col sm={12} md={6} lg={6}>
