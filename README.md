@@ -14,7 +14,7 @@ Fullstack Web Application for Kaye_the_barber, linked to a Mongoose Database and
  - Frontend Node Application
  - Backend Express Application
  - Mongoose Database Connection
- - Add Databases Created
+ - All Databases Created
  - All Models (Excluding Users) Created
 
 **Version 1.1:**
@@ -127,6 +127,11 @@ Fullstack Web Application for Kaye_the_barber, linked to a Mongoose Database and
  - Updated Success Message for Account Contact Details edit
 
 ***Version 1.8.1.1**
+*README update*
+
+ - Updated README File
+
+***Version 1.8.1.2**
 *README update*
 
  - Updated README File
